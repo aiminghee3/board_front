@@ -7,6 +7,8 @@ import BoardPage from './page/BoardPage';
 import MainPage from './page/MainPage';
 import Header from './components/common/HeaderComponent';
 import WritingPage from './page/WritingPage';
+import TestPage from './TestPage';
+
 
 function App() {
   return (
@@ -14,9 +16,11 @@ function App() {
       <Header/>
       <Routes>
       <Route path = "/" Component = {MainPage} />
+      <Route path = "/login" Component = {LoginPage} />
       <Route path = "/signup" Component = {SignupPage} />
       <Route path = "/board" Component = {BoardPage} />
       <Route path = "/write" Component = {WritingPage} />
+      <Route path = "/test" Component = {TestPage} />
       </Routes>
     </div>
   );

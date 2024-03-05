@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {Link, useNavigate} from 'react-router-dom';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 
 const LoginComponent = () => {
@@ -29,6 +30,7 @@ const LoginComponent = () => {
         console.log(response.headers)
         console.log(response.data)
         if(response.status === 200){
+          Cookies.set('token', response.data.token);
           console.log(response.headers)
           console.log('로그인 성공');
           navigate('/board');
@@ -40,7 +42,7 @@ const LoginComponent = () => {
 
     return (
       <>
-        <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="flex min-h-full flex-1 flex-col px-6 py-12 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img
               className="mx-auto h-10 w-auto"

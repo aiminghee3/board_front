@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import Cookies from 'js-cookie';
 import axios from 'axios';
 
 const Writing = () =>{
@@ -21,9 +22,17 @@ const Writing = () =>{
     const handleSubmit = async (e) => {
         e.preventDefault();
     
+        const token = Cookies.get('token');
+        console.log(token)
+        console.log(postData)
         try {
           // POST 요청 보내기
-          const response = await axios.post('https://localhost:8080.typicode.com/posts', postData);
+          const response = await axios.post('http://localhost:8080/post/store', postData,{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+              },
+          });
           console.log('POST 요청 응답:', response.data);
         } catch (error) {
           console.error('POST 요청 에러:', error);
@@ -54,28 +63,28 @@ const Writing = () =>{
                 {/** 성별 */}               
                 <div className='mb-4'>
                     <div className="text-base font-medium text-gray-600 mb-3">성별</div>
-                    <label className={`inline-flex items-center rounded-2xl border border-gray-600 cursor-pointer dark:text-gray-800 ${postData.sex === '남자' ? 'bg-black text-white' : 'bg-white text-black'}`}>
+                    <label className={`inline-flex items-center rounded-2xl border border-gray-600 cursor-pointer dark:text-gray-800 ${postData.sex === 'M' ? 'bg-black text-white' : 'bg-white text-black'}`}>
                         <input
                         type="radio"
                         name="sex"
-                        value="남자"
+                        value="M"
                         onChange={handleInputChange}
-                        checked={postData.sex === '남자'}
+                        checked={postData.sex === 'M'}
                         className="hidden peer"
                         />
-                        <span className={`px-6 py-2 rounded-2xl ${postData.sex === '남자' ? 'bg-black text-white' : 'bg-white text-black'}`}>남자</span>
+                        <span className={`px-6 py-2 rounded-2xl ${postData.sex === 'M' ? 'bg-black text-white' : 'bg-white text-black'}`}>남자</span>
                     </label>
                     
-                    <label className={`inline-flex items-center rounded-2xl border border-gray-600 cursor-pointer dark:text-gray-800 ${postData.sex === '여자' ? 'bg-black text-white' : 'bg-white text-black'}`}>
+                    <label className={`inline-flex items-center rounded-2xl border border-gray-600 cursor-pointer dark:text-gray-800 ${postData.sex === 'F' ? 'bg-black text-white' : 'bg-white text-black'}`}>
                         <input
                         type="radio"
                         name="sex"
-                        value="여자"
+                        value="F"
                         onChange={handleInputChange}
-                        checked={postData.sex === '여자'}
+                        checked={postData.sex === 'F'}
                         className="hidden peer"
                         />
-                        <span className={`px-6 py-2 rounded-2xl ${postData.sex === '여자' ? 'bg-black text-white' : 'bg-white text-black'}`}>여자</span>
+                        <span className={`px-6 py-2 rounded-2xl ${postData.sex === 'F' ? 'bg-black text-white' : 'bg-white text-black'}`}>여자</span>
                     </label>
                 </div>
 
