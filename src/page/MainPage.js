@@ -11,10 +11,10 @@ import {Link} from 'react-router-dom';
 const MainPage = () =>{
     return(
         <>
-        <div className = "w-full h-full pl-1 flex flex-col pt-6">
+        <div className = "max-w-md mx-auto w-full h-full pl-1 flex flex-col pt-6">
             <Man data = {ManData}/>
             <Girl data = {GirlData}/>
-            <Student data = {GirlData}/>
+            <Student data = {ManData}/>
             <Worker data = {GirlData}/>
             <Meeting data = {MeetingData}/>
             <Link to = {"/write"} className="w-14 h-14 rounded-xl flex fixed right-5 bottom-5 mb-7 z-10 bg-white align-middle">
