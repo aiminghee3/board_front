@@ -2,41 +2,51 @@
     {
         "id" : 1,
         "title" : "테스트1",
-        "content" : "테스트",
-        "img_link" : "https://cdn-icons-png.flaticon.com/128/15022/15022032.png",
-        "created_date" : "2022-08-01",
-        "last_created_date" : "2022-08-10"
+        "sex" : "F",
+        "city" : "서울시 서초구",
+        "content" : "테스트다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+        "img_link" : "https://cdn-icons-png.flaticon.com/128/4829/4829575.png",
+        "createdAt" : "2022-08-01",
+        "updatedAt" : "2022-08-10"
     },
     {
         "id" : 2,
         "title" : "테스트2",
-        "content" : "테스트",
-        "img_link" : "https://cdn-icons-png.flaticon.com/128/15022/15022032.png",
-        "created_date" : "2022-08-01",
-        "last_created_date" : "2022-08-10"
+        "sex" : "F",
+        "city" : "서울시 서초구",
+        "content" : "테스트다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+        "img_link" : "https://cdn-icons-png.flaticon.com/128/4829/4829575.png",
+        "createdAt" : "2022-08-01",
+        "updatedAt" : "2022-08-10"
     },
     {
         "id" : 3,
         "title" : "테스트3",
-        "content" : "테스트",
-        "img_link" : "https://cdn-icons-png.flaticon.com/128/15022/15022032.png",
-        "created_date" : "2022-08-01",
-        "last_created_date" : "2022-08-10"
+        "sex" : "F",
+        "city" : "서울시 서초구",
+        "content" : "테스트다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+        "img_link" : "https://cdn-icons-png.flaticon.com/128/4829/4829575.png",
+        "createdAt" : "2022-08-01",
+        "updatedAt" : "2022-08-10"
     },
     {
         "id" : 4,
         "title" : "테스트4",
-        "content" : "테스트",
-        "img_link" : "https://cdn-icons-png.flaticon.com/128/15022/15022039.png",
-        "created_date" : "2022-08-01",
-        "last_created_date" : "2022-08-10"
+        "sex" : "F",
+        "city" : "서울시 서초구",
+        "content" : "테스트다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+        "img_link" : "https://cdn-icons-png.flaticon.com/128/4829/4829575.png",
+        "createdAt" : "2022-08-01",
+        "updatedAt" : "2022-08-10"
     },
     {
         "id" : 5,
         "title" : "테스트5",
-        "content" : "테스트",
-        "img_link" : "https://cdn-icons-png.flaticon.com/128/15022/15022039.png",
-        "created_date" : "2022-08-01",
-        "last_created_date" : "2022-08-10"
+        "sex" : "F",
+        "city" : "서울시 서초구",
+        "content" : "테스트다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ",
+        "img_link" : "https://cdn-icons-png.flaticon.com/128/4829/4829575.png",
+        "createdAt" : "2022-08-01",
+        "updatedAt" : "2022-08-10"
     }
 ]
