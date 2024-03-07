@@ -19,7 +19,6 @@ const LoginComponent = () => {
         ...formData,
         [name]: type === 'checkbox' ? checked : value,
       });
-      console.log(formData.email, formData.password);
     };
 
     const handleSubmit = async (e) => {

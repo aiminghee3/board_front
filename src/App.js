@@ -9,6 +9,8 @@ import Header from './components/common/HeaderComponent';
 import WritingPage from './page/WritingPage';
 import TestPage from './TestPage';
 import Post from './components/posting/Post';
+import MyPage from './components/member/MyPage';
+import Detail from './components/main/Detail';
 
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
       <Route path = "/write" Component = {WritingPage} />
       <Route path = "/test" Component = {TestPage} />
       <Route path = "/post" Component = {Post} />
+      <Route path = "/mypage" Component = {MyPage} />
+      <Route path = "/detail" Component = {Detail} />
       </Routes>
     </div>
   );

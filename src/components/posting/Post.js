@@ -5,27 +5,63 @@ import axios from 'axios';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Rate } from 'antd';
+import { Button, Modal, Space } from 'antd';
+import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+import 'tui-color-picker/dist/tui-color-picker.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+import '@toast-ui/editor/dist/i18n/ko-kr';
+
+import 'prismjs/themes/prism.css';
+import '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight.css';
+
+// Step 1. Import prismjs
+import prism from 'prismjs';
+
+// Step 2. Import language files of prismjs that you need
+import 'prismjs/components/prism-clojure.js';
+
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
 
 
 const Post = () =>{
     const editorRef = useRef();
 
-    const [rateValue, setRateValue] = useState(0);
+    const toolbar =  [
+        ['heading', 'bold', 'italic', 'strike'],
+        ['hr', 'quote'],
+        ['ul', 'ol', 'task', 'indent', 'outdent'],
+        ['code', 'codeblock'],
+        ['scrollSync']
+      ]
+
+    {/** 모달 */}
+    const [open, setOpen] = useState(false);
+
+    const showModal = () => {
+        setOpen(true);
+      };
+      const handleOk = () => {
+        setOpen(false);
+      };
+    
+      const handleCancel = () => {
+        setOpen(false);
+      };
+
     const [postData, setPostData] = useState({
         title : '',
-        number : '',
+        problem_number : '',
         tag : '',
-        link : '',
+        pronlem_link : '',
         content : '',
-        rateValue : 0
+        rate : 0
     });
     {/** 별점 */}
     const handleRateChange = (value) => {
         // 선택된 별점 값을 상태로 저장
-        setRateValue(value);
         setPostData({
             ...postData,
-            rateValue : value,
+            rate : value,
         });
     };
     {/**제목, 번호, 태그, 링크 */}
@@ -63,7 +99,7 @@ const Post = () =>{
     };
     return(
         <>
-        <div className = "w-full h-full max-w-6xl mx-auto">
+        <div className = "w-full h-full max-w-4xl mx-auto">
             <div className = "h-56 pt-4 flex flex-col justify-around">
                 <input
                 className = "w-full outline-none text-2xl"
@@ -78,9 +114,9 @@ const Post = () =>{
                 <input
                 className = "w-full outline-none text-lg"
                 type="text"
-                id="number"
-                name = "number"
-                value={postData.number}
+                id="problem_number"
+                name = "problem_number"
+                value={postData.problem_number}
                 onChange={handleInputChange}
                 placeholder="문제번호를 입력하세요"/>
                 <div className = "w-10 border border-gray-700 mb-1"/>
@@ -98,9 +134,9 @@ const Post = () =>{
                 <input
                 className = "w-full outline-none text-lg"
                 type="text"
-                id="link"
-                name = "link"
-                value={postData.link}
+                id="problem_link"
+                name = "problem_link"
+                value={postData.problem_link}
                 onChange={handleInputChange}
                 placeholder="문제 링크를 입력하세요."/>
                 <div className = "w-10 border border-gray-700 mb-1"/>
@@ -110,18 +146,41 @@ const Post = () =>{
                         <div className = "font-medium mr-2">중요도</div>
                         <Rate className = "text-md" onChange={handleRateChange}/>
                     </div>
-                    <button onClick={handleSubmit} className = "bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 작성</button>
+                    <button onClick={showModal} className = "bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 작성</button>
                 </div>
             </div>
             <Editor
                 ref={editorRef}
                 onChange={handelContent}
-                initialValue="여기에 리뷰를 작성해주세요."
-                previewStyle="vertical"
+                initialValue=""
+                previewStyle="tab" 
                 height="600px"
-                initialEditType="wysiwyg"
+                initialEditType="markdown"
                 useCommandShortcut={false}
+                toolbarItems={toolbar}
+                plugins={[
+                    colorSyntax,
+                    [codeSyntaxHighlight, { highlighter: prism }]
+                ]}
+                language="ko-KR"
+                
             />
+
+            <Modal
+                open={open}
+                title="알림사항"
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={(_, { OkBtn, CancelBtn }) => (
+                <>
+                    <Button onClick={handleSubmit}>저장</Button>
+                    <Button onClick={handleOk}>취소</Button>
+                </>
+                )}
+            >
+            <div>게시글을 저장하시겠습니까?</div>
+            </Modal>
+
         </div>
         </>
     )
