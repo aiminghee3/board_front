@@ -35,20 +35,6 @@ const Main = () =>{
             navigate('/post');
         }
     }
-
-    /*
-    const data = [
-        { id: 1, number : 1234, title : '뿌요뿌요', content: 'Item 1' },
-        { id: 2, number : 5557, title : '뿌요뿌요', content: 'Item 2' },
-        { id: 3, number : 231, title : '뿌요뿌요', content: 'Item 3' },
-        { id: 4, number : 5183, title : '뿌요뿌요', content: 'Item 4' },
-        { id: 5, number : 2841, title : '뿌요뿌요', content: 'Item 5' },
-        { id: 6, number : 1295, title : '뿌요뿌요', content: 'Item 6' },
-        { id: 7, number : 3852, title : '뿌요뿌요', content: 'Item 7' },
-        // ... 계속해서 데이터를 추가
-      ];
-    */
-
     const tag = [
         { id: 1, tag: '전체' },
         { id: 1, tag: '프로그래머스' },
@@ -59,7 +45,7 @@ const Main = () =>{
         { id: 1, tag: '그래프' },
         // ... 계속해서 데이터를 추가
       ];
-      
+
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     
@@ -88,15 +74,15 @@ const Main = () =>{
                     <button onClick={movePosting} className = "mr-2 border-b">글 작성하기</button>
                 </div>
 
-            <div className = "h-8 w-full flex justify-between items-center">
-                <div className = "flex">
-                    {tag.map((item) => (
-                        <div key = {item.id} className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
-                            <button className = "text-green-600">{item.tag}</button>
+                <div className = "h-8 w-full flex justify-between items-center">
+                    <div className = "flex">
+                        {tag.map((item) => (
+                            <div key = {item.id} className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
+                                <button className = "text-green-600">{item.tag}</button>
+                            </div>
+                            ))}
                         </div>
-                        ))}
                     </div>
-                </div>
             </div>
 
             <div className="grid grid-cols-3 gap-4 mt-3">
@@ -113,6 +99,16 @@ const Main = () =>{
                     
                     <div className = "h-10 w-full pl-2">
                         <div className = "font-normal text-xl text-gray-700">{item.title}</div>
+                    </div>
+                    <div className = "h-8 w-full flex justify-between items-center">
+
+                        <div className = "flex">
+                        {item.Hashtags.map((item) => (
+                            <div key = {item.id} className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
+                                <button className = "text-green-600">{item.name}</button>
+                            </div>
+                            ))}
+                        </div>
                     </div>
 
                     </Link>

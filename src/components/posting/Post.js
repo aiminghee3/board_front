@@ -5,7 +5,7 @@ import axios from 'axios';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Rate } from 'antd';
-import { Button, Modal, Space } from 'antd';
+import { Button, Modal, Space, Select } from 'antd';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
@@ -21,6 +21,7 @@ import prism from 'prismjs';
 import 'prismjs/components/prism-clojure.js';
 
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+import TagComponent from "../common/TagComponent";
 
 
 const Post = () =>{
@@ -51,11 +52,20 @@ const Post = () =>{
     const [postData, setPostData] = useState({
         title : '',
         problem_number : '',
-        tag : '',
         pronlem_link : '',
         content : '',
-        rate : 0
+        rate : 0,
+        hashtags : []
     });
+
+    const handleChange = (value) => {
+        setPostData({
+            ...postData,
+            hashtags : value,
+        });
+        console.log(postData);
+      };
+
     {/** 별점 */}
     const handleRateChange = (value) => {
         // 선택된 별점 값을 상태로 저장
@@ -100,7 +110,7 @@ const Post = () =>{
     return(
         <>
         <div className = "w-full h-full max-w-4xl mx-auto">
-            <div className = "h-56 pt-4 flex flex-col justify-around">
+            <div className = "h-80 pt-4 flex flex-col justify-around">
                 <input
                 className = "w-full outline-none text-2xl"
                 type="text"
@@ -120,17 +130,7 @@ const Post = () =>{
                 onChange={handleInputChange}
                 placeholder="문제번호를 입력하세요"/>
                 <div className = "w-10 border border-gray-700 mb-1"/>
-
-                <input
-                className = "w-full outline-none text-lg"
-                type="text"
-                id="tag"
-                name = "tag"
-                value={postData.tag}
-                onChange={handleInputChange}
-                placeholder="태그를 입력하세요 ex) DP"/>
-                <div className = "w-10 border border-gray-700 mb-1"/>
-
+                 
                 <input
                 className = "w-full outline-none text-lg"
                 type="text"
@@ -140,13 +140,44 @@ const Post = () =>{
                 onChange={handleInputChange}
                 placeholder="문제 링크를 입력하세요."/>
                 <div className = "w-10 border border-gray-700 mb-1"/>
+                
+                <Space
+                    style={{
+                    width: '100%',
+                    }}
+                    direction="vertical"
+                >
+                    <Select
+                    mode="multiple"
+                    allowClear
+                    style={{
+                        width: '100%',
+                    }}
+                    placeholder="Please select"
+                    defaultValue={['tag Sample']}
+                    onChange={handleChange}
+                    options={[
+                        { value: '백준', label: '백준' },
+                        { value: '프로그래머스', label: '프로그래머스' },
+                        { value: 'DP', label: 'DP' },
+                        { value: '브루트포스', label: '브루트포스' },
+                        { value: '그리디', label: '그리디' },
+                        { value: '그래프', label: '그래프'},
+                        { value: '문자열', label: '문자열'},
+                        { value: '정렬', label: '정렬'},
+                        { value: '스택', label: '스택'},
+                        { value: '큐', label: '큐'},
+                    ]}
+                    />
+                </Space>
 
                 <div className = "flex h-8 items-center justify-between">
                     <div className = "flex items-center">
                         <div className = "font-medium mr-2">중요도</div>
                         <Rate className = "text-md" onChange={handleRateChange}/>
                     </div>
-                    <button onClick={showModal} className = "bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 작성</button>
+                    <Button onClick={showModal} type="primary" className = "bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 작성</Button>
+                    
                 </div>
             </div>
             <Editor

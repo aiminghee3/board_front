@@ -1,16 +1,48 @@
 import React, { useState, useEffect } from "react";
 import { Rate } from 'antd';
 import { useLocation } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import { Editor } from '@toast-ui/react-editor';
 import { Viewer } from '@toast-ui/react-editor';
+import { Button, Modal, Space } from 'antd';
+import axios from 'axios';
+import TagComponent from "../common/TagComponent";
 
 const Detail = (props) =>{
     const location = useLocation();
-
+    const navigate = useNavigate();
     const data = location.state.data;
 
-    useEffect(()=>{
-    }, [])
+    {/** 모달 */}
+    const [open, setOpen] = useState(false);
+
+    const showModal = () => {
+        setOpen(true);
+      };
+      const handleOk = () => {
+        setOpen(false);
+      };
+    
+      const handleCancel = () => {
+        setOpen(false);
+      };
+
+    const deletePage = async (postId) =>{
+        handleCancel();
+        console.log(postId)
+        try {
+            // 게시글 삭제 요청
+            await axios.delete(`http://localhost:8080/post/delete/${postId}`);
+    
+            // 삭제가 성공하면 화면에서 게시글을 업데이트하거나 다시 불러올 수 있습니다.
+            // 여기에서는 간단히 콘솔에 메시지 출력으로 대체합니다.
+            console.log(`게시글 ID ${postId}가 성공적으로 삭제되었습니다.`);
+            navigate('/');
+        } catch (error) {
+            console.error('게시글 삭제에 실패했습니다.', error.message);
+        }
+    }
+
     return(
         <>
         <div className = "h-full max-w-3xl mx-auto">
@@ -41,7 +73,7 @@ const Detail = (props) =>{
                     </div>
 
                     <div className = "pt-1 flex w-20 justify-between text-gray-400">
-                        <div>수정</div> | <div>삭제</div>
+                        <div>수정</div> | <button onClick = {() => showModal(data.id)}>삭제</button>
                     </div>
                 </div>
             </div>
@@ -51,6 +83,21 @@ const Detail = (props) =>{
                 />
             </div>
         </div>
+
+        <Modal
+                open={open}
+                title="주의"
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={(_, { OkBtn, CancelBtn }) => (
+                <>
+                    <Button onClick= {() => deletePage(data.id)}>예</Button>
+                    <Button onClick={handleOk}>아니오</Button>
+                </>
+                )}
+            >
+            <div>정말로 삭제하시겠습니까?</div>
+        </Modal>
         </>
     )
 }
