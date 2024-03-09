@@ -63,14 +63,13 @@ const Detail = (props) =>{
 
                 <div className = "h-15 w-full mt-3 flex justify-between items-center">
 
-                    <div className = "flex">
-                        <div className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
-                            <div className = "text-green-600">백준</div>
+                        <div className = "flex">
+                            {data.Hashtags.map((item) => (
+                                <div key = {item.id} className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
+                                    <button className = "text-green-600">{item.name}</button>
+                                </div>
+                            ))}
                         </div>
-                        <div className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center">
-                            <div className = "text-green-600">프로그래머스</div>
-                        </div>
-                    </div>
 
                     <div className = "pt-1 flex w-20 justify-between text-gray-400">
                         <div>수정</div> | <button onClick = {() => showModal(data.id)}>삭제</button>

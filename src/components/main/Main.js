@@ -35,16 +35,40 @@ const Main = () =>{
             navigate('/post');
         }
     }
-    const tag = [
+
+    /**
+     * 태그
+     */
+    const [selectedButtons, setSelectedButtons] = useState([]);
+
+    const tags = [
         { id: 1, tag: '전체' },
-        { id: 1, tag: '프로그래머스' },
-        { id: 1, tag: '백준' },
-        { id: 1, tag: 'DP' },
-        { id: 1, tag: '그리디' },
-        { id: 1, tag: '투포인터' },
-        { id: 1, tag: '그래프' },
+        { id: 2, tag: '프로그래머스' },
+        { id: 3, tag: '백준' },
+        { id: 4, tag: 'DP' },
+        { id: 5, tag: '그리디' },
+        { id: 6, tag: '투포인터' },
+        { id: 7, tag: '그래프' },
         // ... 계속해서 데이터를 추가
       ];
+    
+      const buttons = [
+        { id: 1, text: 'Button 1' },
+        { id: 2, text: 'Button 2' },
+        { id: 3, text: 'Button 3' },
+        // 추가적인 버튼 정보는 필요에 따라 계속 추가할 수 있습니다.
+      ];
+    const handleButtonClick = (button) => {
+        // 선택된 버튼이 이미 있는 경우 해제, 없는 경우 추가
+        setSelectedButtons((prevSelected) => {
+          const isSelected = prevSelected.includes(button.id);
+          if (isSelected) {
+            return prevSelected.filter((id) => id !== button.id);
+          } else {
+            return [...prevSelected, button.id];
+          }
+        });
+      };
 
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -73,17 +97,24 @@ const Main = () =>{
                     <div className = "text-gray-700 mb-2 text-lg">태그목록</div>
                     <button onClick={movePosting} className = "mr-2 border-b">글 작성하기</button>
                 </div>
-
+                
+                {/**태그 */}
                 <div className = "h-8 w-full flex justify-between items-center">
                     <div className = "flex">
-                        {tag.map((item) => (
-                            <div key = {item.id} className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
-                                <button className = "text-green-600">{item.tag}</button>
-                            </div>
+                            {tags.map((item) => (
+                                <button key={item.id}
+                                className={`${selectedButtons.includes(item.id)
+                                    ? 'bg-gray-400 text-green-600 text-xs'
+                                    : 'bg-gray-100 text-green-600 text-xs'
+                                } rounded-xl px-3 py-1 flex justify-center items-center mr-2`}
+                                onClick={() => handleButtonClick(item)}
+                                >
+                                {item.tag}
+                                </button>
                             ))}
                         </div>
                     </div>
-            </div>
+                </div>
 
             <div className="grid grid-cols-3 gap-4 mt-3">
                 {loading ? (
@@ -104,10 +135,10 @@ const Main = () =>{
 
                         <div className = "flex">
                         {item.Hashtags.map((item) => (
-                            <div key = {item.id} className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
-                                <button className = "text-green-600">{item.name}</button>
+                            <div key = {item.id} className = "bg-gray-100 rounded-lg px-3 py-1 flex justify-center items-center mr-2">
+                                <button className = "text-green-600 text-xs">{item.name}</button>
                             </div>
-                            ))}
+                        ))}
                         </div>
                     </div>
 
