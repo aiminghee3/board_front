@@ -52,34 +52,47 @@ const Main = () =>{
         // ... 계속해서 데이터를 추가
       ];
     
-      const buttons = [
-        { id: 1, text: 'Button 1' },
-        { id: 2, text: 'Button 2' },
-        { id: 3, text: 'Button 3' },
-        // 추가적인 버튼 정보는 필요에 따라 계속 추가할 수 있습니다.
-      ];
     const handleButtonClick = (button) => {
         // 선택된 버튼이 이미 있는 경우 해제, 없는 경우 추가
         setSelectedButtons((prevSelected) => {
-          const isSelected = prevSelected.includes(button.id);
+          const isSelected = prevSelected.includes(button.tag);
+          console.log(selectedButtons);
+          console.log(button)
           if (isSelected) {
-            return prevSelected.filter((id) => id !== button.id);
+            return prevSelected.filter((tag) => tag !== button.tag);
           } else {
-            return [...prevSelected, button.id];
+            return [...prevSelected, button.tag];
           }
         });
       };
 
+    /**
+     * 태그 조정   
+     */
+    useEffect(()=>{
+        console.log(selectedButtons);
+        
+        const filteredData = originData && originData.filter((problem) => {
+            const hashtags = problem.Hashtags.map((tag) => tag.name);
+            if(selectedButtons.includes('전체') || selectedButtons.length === 0){
+                return originData;
+            }
+            return selectedButtons.some((tag) => hashtags.includes(tag));
+          });
+        setData(filteredData)
+    }, [selectedButtons])
+
     const [data, setData] = useState(null);
+    const [originData, setOriginData] = useState(null)
     const [loading, setLoading] = useState(true);
     
     const getData = async() =>{
         try {
             // 서버의 API 엔드포인트에 GET 요청을 보냅니다.
             const response = await axios.get('http://localhost:8080/post/get/all');
-    
             // 응답에서 필요한 데이터를 추출하여 상태에 저장합니다.
-            setData(response.data);
+            await setData(response.data);
+            await setOriginData(response.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
@@ -87,6 +100,10 @@ const Main = () =>{
             setLoading(false);
         }
     }
+
+    /**
+     * api 가져오기
+     */
     useEffect(()=>{
         getData();
     }, [])
@@ -103,7 +120,7 @@ const Main = () =>{
                     <div className = "flex">
                             {tags.map((item) => (
                                 <button key={item.id}
-                                className={`${selectedButtons.includes(item.id)
+                                className={`${selectedButtons.includes(item.tag)
                                     ? 'bg-gray-400 text-green-600 text-xs'
                                     : 'bg-gray-100 text-green-600 text-xs'
                                 } rounded-xl px-3 py-1 flex justify-center items-center mr-2`}
