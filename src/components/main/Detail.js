@@ -83,7 +83,7 @@ const Detail = (props) =>{
                             ))}
                         </div>
                     {authority ? <div className = "pt-1 flex w-20 justify-between text-gray-400 text-sm">
-                        <div>수정</div> | <button onClick = {() => showModal(data.id)}>삭제</button>
+                        <Link to = {'/modify'} state = {{ detail: data }}>수정</Link> | <button onClick = {() => showModal(data.id)}>삭제</button>
                     </div> : <></>}
                 </div>
             </div>
