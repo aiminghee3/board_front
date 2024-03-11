@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { authorCheck } from '../../atom';
 
 const LoginComponent = () => {
     const navigate = useNavigate();
+
+    const [author, setAuthor] = useRecoilState(authorCheck);
 
     const [formData, setFormData] = useState({
       email: '',
@@ -26,12 +30,10 @@ const LoginComponent = () => {
       e.preventDefault();
       try {
         const response = await axios.post('http://localhost:8080/auth/login', formData);
-        console.log(response.headers)
-        console.log(response.data)
+
         if(response.status === 200){
           Cookies.set('token', response.data.token);
-          console.log(response.headers)
-          console.log('로그인 성공');
+          setAuthor(response.data.id);
           navigate('/board');
         }
       } catch (error) {

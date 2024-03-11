@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import RequireLoginModal from "../common/RequireLoginModal";
 import {Link} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -6,6 +7,7 @@ import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Rate } from 'antd';
 import { Button, Modal, Space, Select } from 'antd';
+import SuccessModal from "../common/SuccessModal";
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
@@ -21,7 +23,6 @@ import prism from 'prismjs';
 import 'prismjs/components/prism-clojure.js';
 
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
-import TagComponent from "../common/TagComponent";
 
 
 const Post = () =>{
@@ -37,6 +38,8 @@ const Post = () =>{
 
     {/** 모달 */}
     const [open, setOpen] = useState(false);
+    const [requireLogin, setRequireSetLogin] = useState(false);
+    const [success, setSuccess] = useState(false)
 
     const showModal = () => {
         setOpen(true);
@@ -103,10 +106,33 @@ const Post = () =>{
                 },
             });
             console.log('POST 요청 응답:', response.data);
+            setSuccess(true) // 게시글 저장 후 모달 띄우기
+            setOpen(false) // 게시글을 저장하시겠습니까 닫기
         } catch (error) {
             console.error('POST 요청 에러:', error);
         }
     };
+
+    
+    const verifyToken = async () =>{
+        const token = Cookies.get('token');
+        try {
+            // 토큰 검증하기
+            const response = await axios.get('http://localhost:8080/auth/verify', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    },
+                });
+            console.log(response.status)
+        } catch (error) {
+            await setRequireSetLogin(true)
+            console.error('로그인 토큰 검증에 실패하셨습니다.', error);
+        }
+    }
+    useEffect(()=>{
+        verifyToken();
+    }, [])
+   
     return(
         <>
         <div className = "w-full h-full max-w-4xl mx-auto">
@@ -211,7 +237,9 @@ const Post = () =>{
             >
             <div>게시글을 저장하시겠습니까?</div>
             </Modal>
-
+            <RequireLoginModal open = {requireLogin}/>
+            <SuccessModal open = {success} />
+            
         </div>
         </>
     )

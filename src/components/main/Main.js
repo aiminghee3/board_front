@@ -4,37 +4,11 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { Rate } from 'antd';
 import { Button, Modal } from 'antd';
+import TestPage from "../../TestPage";
 
 const Main = () =>{
 
     const navigate = useNavigate();
-
-    {/** 모달 */}
-    const [open, setOpen] = useState(false);
-
-    const openModal = () => {
-        setOpen(true);
-        console.log('test')
-      };
-
-    const moveLogin = () =>{
-        navigate('/login');
-    }
-
-    const closeModal = () => {
-        setOpen(false)
-        moveLogin();
-    }
-
-    const movePosting = () =>{
-        const token = Cookies.get('token');
-        if(!token){
-            openModal();
-        }
-        else{
-            navigate('/post');
-        }
-    }
 
     /**
      * 태그
@@ -47,8 +21,12 @@ const Main = () =>{
         { id: 3, tag: '백준' },
         { id: 4, tag: 'DP' },
         { id: 5, tag: '그리디' },
-        { id: 6, tag: '투포인터' },
+        { id: 6, tag: '브루트포스' },
         { id: 7, tag: '그래프' },
+        { id: 8, tag: '문자열' },
+        { id: 9, tag: '정렬' },
+        { id: 10, tag: '스택' },
+        { id: 11, tag: '큐' },
         // ... 계속해서 데이터를 추가
       ];
     
@@ -56,8 +34,6 @@ const Main = () =>{
         // 선택된 버튼이 이미 있는 경우 해제, 없는 경우 추가
         setSelectedButtons((prevSelected) => {
           const isSelected = prevSelected.includes(button.tag);
-          console.log(selectedButtons);
-          console.log(button)
           if (isSelected) {
             return prevSelected.filter((tag) => tag !== button.tag);
           } else {
@@ -65,22 +41,6 @@ const Main = () =>{
           }
         });
       };
-
-    /**
-     * 태그 조정   
-     */
-    useEffect(()=>{
-        console.log(selectedButtons);
-        
-        const filteredData = originData && originData.filter((problem) => {
-            const hashtags = problem.Hashtags.map((tag) => tag.name);
-            if(selectedButtons.includes('전체') || selectedButtons.length === 0){
-                return originData;
-            }
-            return selectedButtons.some((tag) => hashtags.includes(tag));
-          });
-        setData(filteredData)
-    }, [selectedButtons])
 
     const [data, setData] = useState(null);
     const [originData, setOriginData] = useState(null)
@@ -90,6 +50,7 @@ const Main = () =>{
         try {
             // 서버의 API 엔드포인트에 GET 요청을 보냅니다.
             const response = await axios.get('http://localhost:8080/post/get/all');
+            console.log(response.data)
             // 응답에서 필요한 데이터를 추출하여 상태에 저장합니다.
             await setData(response.data);
             await setOriginData(response.data);
@@ -105,20 +66,36 @@ const Main = () =>{
      * api 가져오기
      */
     useEffect(()=>{
-        getData();
+        getData();        
     }, [])
+
+    /**
+     * 태그 조정   
+     */
+        useEffect(()=>{
+            console.log(selectedButtons);
+            
+            const filteredData = originData && originData.filter((problem) => {
+                const hashtags = problem.Hashtags.map((tag) => tag.name);
+                if(selectedButtons.includes('전체') || selectedButtons.length === 0){
+                    return originData;
+                }
+                return selectedButtons.some((tag) => hashtags.includes(tag));
+              });
+            setData(filteredData)
+        }, [selectedButtons])
     return(
         <>
             <div className = "w-full h-20 pl-1 mb-2">
                 <div className = "flex w-full justify-between">
                     <div className = "text-gray-700 mb-2 text-lg">태그목록</div>
-                    <button onClick={movePosting} className = "mr-2 border-b">글 작성하기</button>
+                    <Link to = {'/post'} className = "mr-2 border-b">글 작성하기</Link>
                 </div>
                 
                 {/**태그 */}
                 <div className = "h-8 w-full flex justify-between items-center">
                     <div className = "flex">
-                            {tags.map((item) => (
+                            {tags && tags.map((item) => (
                                 <button key={item.id}
                                 className={`${selectedButtons.includes(item.tag)
                                     ? 'bg-gray-400 text-green-600 text-xs'
@@ -137,7 +114,7 @@ const Main = () =>{
                 {loading ? (
                     // 로딩 중일 경우 로딩 상태를 표시
                     <p>Loading...</p>
-                ) : (data.map((item) => (
+                ) : (data && data.map((item) => (
                     <Link to = "/detail" state = {{ data: item }} key={item.id} className="col-span-1 p-2 bg-white h-32 w-full border border-gray-400 rounded-xl hover:bg-gray-100">
                     
                     <div className = "flex justify-around items-center w-full h-10">
@@ -162,18 +139,7 @@ const Main = () =>{
                     </Link>
                 )))}
             </div>
-        
-            <Modal
-                open={open}
-                title="알림사항"
-                footer={(_, {}) => (
-                <>
-                    <Button onClick={closeModal}>확인</Button>
-                </>
-                )}
-            >
-            <div>로그인 후 이용해주세요</div>
-            </Modal>
+            
         </>
     )
 }

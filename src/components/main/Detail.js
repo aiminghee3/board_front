@@ -4,9 +4,12 @@ import { useLocation } from 'react-router-dom';
 import {Link, useNavigate} from 'react-router-dom';
 import { Editor } from '@toast-ui/react-editor';
 import { Viewer } from '@toast-ui/react-editor';
-import { Button, Modal, Space } from 'antd';
+import { Button, Modal} from 'antd';
+import Cookies from 'js-cookie';
 import axios from 'axios';
-import TagComponent from "../common/TagComponent";
+import { useRecoilValue } from 'recoil';
+import { authorCheck } from '../../atom';
+
 
 const Detail = (props) =>{
     const location = useLocation();
@@ -29,7 +32,6 @@ const Detail = (props) =>{
 
     const deletePage = async (postId) =>{
         handleCancel();
-        console.log(postId)
         try {
             // 게시글 삭제 요청
             await axios.delete(`http://localhost:8080/post/delete/${postId}`);
@@ -43,6 +45,13 @@ const Detail = (props) =>{
         }
     }
 
+    const author = useRecoilValue(authorCheck);
+    const [authority, setAuthorty] = useState(false)
+
+    useEffect(()=>{
+        if(author === data.memberId)
+            setAuthorty(true)
+    }, [])
     return(
         <>
         <div className = "h-full max-w-3xl mx-auto">
@@ -52,28 +61,30 @@ const Detail = (props) =>{
                     <div className = "text-3xl ml-2 font-semibold">{data.title}</div>
                 </div>
 
-                <div className = "flex w-96 justify-between">
-                    <Rate className = "text-md" allowHalf defaultValue={data.rate} disabled/>
+                <div className = "flex w-full h-6 justify-between items-center">
                     <div className = "flex">
-                    <div>알림 예정일</div>
-                    <div className = "ml-2 font-semibold">2023-12-15</div>
+                        <Rate className = "text-md pt-0.5" allowHalf defaultValue={data.rate} disabled/>
+                        <div className = "flex">
+                        <div className = "ml-2">알림 예정일</div>
+                        <div className = "ml-2 font-semibold">(업데이트 예정)</div>
+                        </div>
+                        <a href = {data.problem_link} className = "underline text-gray-500 ml-3" target="_blank" rel="noopener noreferrer">문제링크</a>
                     </div>
-                    <a href = {data.problem_link} className = "underline text-gray-500">문제링크</a>
+                    <div className = "font-extralight text-gray-600 text-sm">작성자 : {data.Member.email}</div>
                 </div>
 
-                <div className = "h-15 w-full mt-3 flex justify-between items-center">
+                <div className = "h-15 w-full mt-4 flex justify-between items-center">
 
                         <div className = "flex">
                             {data.Hashtags.map((item) => (
                                 <div key = {item.id} className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
-                                    <button className = "text-green-600">{item.name}</button>
+                                    <button className = "text-green-600 text-xs">{item.name}</button>
                                 </div>
                             ))}
                         </div>
-
-                    <div className = "pt-1 flex w-20 justify-between text-gray-400">
+                    {authority ? <div className = "pt-1 flex w-20 justify-between text-gray-400 text-sm">
                         <div>수정</div> | <button onClick = {() => showModal(data.id)}>삭제</button>
-                    </div>
+                    </div> : <></>}
                 </div>
             </div>
             <div className = "pt-4 px-2">
