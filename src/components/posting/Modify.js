@@ -205,7 +205,7 @@ const Modify = (props) =>{
                         <div className = "font-medium mr-2">중요도</div>
                         <Rate className = "text-md" onChange={handleRateChange} defaultValue={data.rate}/>
                     </div>
-                    <Button onClick={showModal} type="primary" className = "bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 작성</Button>
+                    <Button onClick={showModal} type="primary" className = "bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 수정</Button>
                     
                 </div>
             </div>
@@ -238,7 +238,7 @@ const Modify = (props) =>{
                 </>
                 )}
             >
-            <div>게시글을 저장하시겠습니까?</div>
+            <div>게시글을 수정하시겠습니까?</div>
             </Modal>
             <RequireLoginModal open = {requireLogin}/>
             <SuccessModal open = {success} />
