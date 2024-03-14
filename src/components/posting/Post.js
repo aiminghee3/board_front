@@ -60,7 +60,8 @@ const Post = () =>{
         content : '',
         rate : 0,
         hashtags : [],
-        alarm : ''
+        token : null,
+        alarm : null
     });
 
     const handleChange = (value) => {
@@ -85,6 +86,7 @@ const Post = () =>{
             [e.target.name]: e.target.value,
         });
       };
+
     {/**본문 */}
     const handelContent = () =>{
         const content = editorRef.current.getInstance().getMarkdown();
@@ -93,14 +95,12 @@ const Post = () =>{
             content : content,
         });
     }
+
     {/** 알람시간 */}
     const setAlarm = (date, dateString) =>{
-        setPostData({
-            ...postData,
-            alarm : dateString,
-        }); 
-        author_alarm();
+        author_alarm(dateString);
     }
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -139,27 +139,28 @@ const Post = () =>{
         }
     }
 
-    const author_alarm = () =>{  
+    const author_alarm = async (dateString) =>{  
         const messaging = getMessaging();
         console.log("권한 요청 중...");
-    
-        Notification.requestPermission().then((permission) => {
+        try{
+            const permission = await Notification.requestPermission();    
             if (permission === "granted") {
-            console.log("알림 권한이 허용됨");
-            getToken(messaging, { vapidKey: process.env.REACT_APP_VAPID_KEY }).then((currentToken) => {
-                if (currentToken) {
-                console.log(`푸시 토큰 발급 완료 : ${currentToken}`)
+                console.log("알림 권한이 허용됨");
+                const currentToken = await getToken(messaging, { vapidKey: process.env.REACT_APP_VAPID_KEY });
+                if(currentToken){
+                    setPostData({
+                        ...postData,
+                        alarm : dateString,
+                        token : currentToken, //토큰 서버에 보내기
+                    });
+                    console.log(`푸시 토큰 발급 완료 : ${currentToken}`)
                 } else {
                 console.log('No registration token available. Request permission to generate one.');
                 }
-            }).catch((err) => {
-                console.log('An error occurred while retrieving token. ', err);
-            });
-            // FCM 메세지 처리
-            } else {
-            console.log("알림 권한 허용 안됨");
             }
-        });
+        }catch(err){
+            console.log('error', err);
+        }
     }
 
     useEffect(()=>{
