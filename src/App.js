@@ -1,4 +1,5 @@
 import './input.css';
+import './firebase-messaging-sw';
 import { Routes, Route } from "react-router-dom";
 import LoginPage from './page/LoginPage';
 import SignupPage from './page/SignupPage';
@@ -8,8 +9,9 @@ import Header from './components/common/HeaderComponent';
 import WritingPage from './page/WritingPage';
 import TestPage from './TestPage';
 import Post from './components/posting/Post';
-import MyPage from './components/member/MyPage';
+import MyPage from './page/MyPage';
 import Detail from './components/main/Detail';
+import Modify from './components/posting/Modify';
 
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
       <Route path = "/post" Component = {Post} />
       <Route path = "/mypage" Component = {MyPage} />
       <Route path = "/detail" Component = {Detail} />
+      <Route path = "/modify" Component = {Modify} />
       </Routes>
     </div>
   );

@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Rate } from 'antd';
-import { Button, Modal, Space, Select } from 'antd';
+import { Button, Modal, Space, Select, DatePicker } from 'antd';
 import SuccessModal from "../common/SuccessModal";
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 import 'tui-color-picker/dist/tui-color-picker.css';
@@ -23,6 +23,7 @@ import prism from 'prismjs';
 import 'prismjs/components/prism-clojure.js';
 
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+import { getMessaging, getToken } from 'firebase/messaging';
 
 
 const Post = () =>{
@@ -58,7 +59,8 @@ const Post = () =>{
         pronlem_link : '',
         content : '',
         rate : 0,
-        hashtags : []
+        hashtags : [],
+        alarm : ''
     });
 
     const handleChange = (value) => {
@@ -66,7 +68,6 @@ const Post = () =>{
             ...postData,
             hashtags : value,
         });
-        console.log(postData);
       };
 
     {/** 별점 */}
@@ -91,6 +92,14 @@ const Post = () =>{
             ...postData,
             content : content,
         });
+    }
+    {/** 알람시간 */}
+    const setAlarm = (date, dateString) =>{
+        setPostData({
+            ...postData,
+            alarm : dateString,
+        }); 
+        author_alarm();
     }
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -129,6 +138,30 @@ const Post = () =>{
             console.error('로그인 토큰 검증에 실패하셨습니다.', error);
         }
     }
+
+    const author_alarm = () =>{  
+        const messaging = getMessaging();
+        console.log("권한 요청 중...");
+    
+        Notification.requestPermission().then((permission) => {
+            if (permission === "granted") {
+            console.log("알림 권한이 허용됨");
+            getToken(messaging, { vapidKey: process.env.REACT_APP_VAPID_KEY }).then((currentToken) => {
+                if (currentToken) {
+                console.log(`푸시 토큰 발급 완료 : ${currentToken}`)
+                } else {
+                console.log('No registration token available. Request permission to generate one.');
+                }
+            }).catch((err) => {
+                console.log('An error occurred while retrieving token. ', err);
+            });
+            // FCM 메세지 처리
+            } else {
+            console.log("알림 권한 허용 안됨");
+            }
+        });
+    }
+
     useEffect(()=>{
         verifyToken();
     }, [])
@@ -201,6 +234,7 @@ const Post = () =>{
                     <div className = "flex items-center">
                         <div className = "font-medium mr-2">중요도</div>
                         <Rate className = "text-md" onChange={handleRateChange}/>
+                        <span className = "ml-4">알림설정</span><DatePicker  onChange={setAlarm} className = "ml-2"/>
                     </div>
                     <Button onClick={showModal} type="primary" className = "bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 작성</Button>
                     
