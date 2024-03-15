@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useRecoilState } from 'recoil';
 import { authorCheck } from '../../atom';
+import AlartModal from "../common/AlartModal";
 
 const LoginComponent = () => {
     const navigate = useNavigate();
@@ -33,8 +34,8 @@ const LoginComponent = () => {
 
         if(response.status === 200){
           Cookies.set('token', response.data.token);
-          setAuthor(response.data.id);
-          navigate('/board');
+          Cookies.set('id', response.data.id);
+          navigate('/');
         }
       } catch (error) {
         console.error('Error:', error);
@@ -51,7 +52,7 @@ const LoginComponent = () => {
               alt="Your Company"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Sign in to your account
+              Algorithm Review
             </h2>
           </div>
   
@@ -59,7 +60,7 @@ const LoginComponent = () => {
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                  Email address
+                  이메일
                 </label>
                 <div className="mt-2">
                   <input
@@ -77,11 +78,11 @@ const LoginComponent = () => {
               <div>
                 <div className="flex items-center justify-between">
                   <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                    Password
+                    비밀번호
                   </label>
                   <div className="text-sm">
                     <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
-                      Forgot password?
+                      비밀번호를 잊으셨나요?
                     </a>
                   </div>
                 </div>
@@ -103,14 +104,14 @@ const LoginComponent = () => {
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Sign in
+                  로그인
                 </button>
               </div>
             </form>
   
             <p className="mt-10 text-center text-sm text-gray-500">
-              Not a member?{' '}
-              <Link to='/signup'  className = "font-semibold leading-6 text-indigo-600 hover:text-indigo-500">signup</Link>
+              아직 회원이 아니신가요?{' '}
+              <Link to='/signup'  className = "font-semibold leading-6 text-indigo-600 hover:text-indigo-500">회원가입</Link>
             </p>
           </div>
         </div>
