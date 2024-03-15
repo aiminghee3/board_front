@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
-import {Link, useNavigate} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { Rate } from 'antd';
-import { Button, Modal } from 'antd';
-import TestPage from "../../TestPage";
 
 const Main = () =>{
-
-    const navigate = useNavigate();
 
     /**
      * 태그
@@ -50,7 +45,6 @@ const Main = () =>{
         try {
             // 서버의 API 엔드포인트에 GET 요청을 보냅니다.
             const response = await axios.get('http://localhost:8080/post/get/all');
-            console.log(response.data)
             // 응답에서 필요한 데이터를 추출하여 상태에 저장합니다.
             await setData(response.data);
             await setOriginData(response.data);
@@ -72,9 +66,7 @@ const Main = () =>{
     /**
      * 태그 조정   
      */
-        useEffect(()=>{
-            console.log(selectedButtons);
-            
+        useEffect(()=>{            
             const filteredData = originData && originData.filter((problem) => {
                 const hashtags = problem.Hashtags.map((tag) => tag.name);
                 if(selectedButtons.includes('전체') || selectedButtons.length === 0){
@@ -84,6 +76,7 @@ const Main = () =>{
               });
             setData(filteredData)
         }, [selectedButtons])
+
     return(
         <>
             <div className = "w-full h-20 pl-1 mb-2">

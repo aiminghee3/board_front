@@ -2,13 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Rate } from 'antd';
 import { useLocation } from 'react-router-dom';
 import {Link, useNavigate} from 'react-router-dom';
-import { Editor } from '@toast-ui/react-editor';
 import { Viewer } from '@toast-ui/react-editor';
 import { Button, Modal} from 'antd';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { useRecoilValue } from 'recoil';
-import { authorCheck } from '../../atom';
 
 
 const Detail = (props) =>{
@@ -16,7 +13,7 @@ const Detail = (props) =>{
     const navigate = useNavigate();
     const data = location.state.data;
 
-    {/** 모달 */}
+    
     const [open, setOpen] = useState(false);
 
     const showModal = () => {
@@ -38,18 +35,16 @@ const Detail = (props) =>{
     
             // 삭제가 성공하면 화면에서 게시글을 업데이트하거나 다시 불러올 수 있습니다.
             // 여기에서는 간단히 콘솔에 메시지 출력으로 대체합니다.
-            console.log(`게시글 ID ${postId}가 성공적으로 삭제되었습니다.`);
+            //console.log(`게시글 ID ${postId}가 성공적으로 삭제되었습니다.`);
             navigate('/');
         } catch (error) {
             console.error('게시글 삭제에 실패했습니다.', error.message);
         }
     }
-
-    const author = useRecoilValue(authorCheck);
     const [authority, setAuthorty] = useState(false)
 
     useEffect(()=>{
-        if(author === data.memberId)
+        if(parseInt(Cookies.get('id')) === data.memberId)
             setAuthorty(true)
     }, [])
     return(

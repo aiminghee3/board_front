@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -23,8 +23,6 @@ const Writing = () =>{
         e.preventDefault();
     
         const token = Cookies.get('token');
-        console.log(token)
-        console.log(postData)
         try {
           // POST 요청 보내기
           const response = await axios.post('http://localhost:8080/post/store', postData,{
@@ -33,7 +31,6 @@ const Writing = () =>{
                 'Authorization': `Bearer ${token}`,
               },
           });
-          console.log('POST 요청 응답:', response.data);
         } catch (error) {
           console.error('POST 요청 에러:', error);
         }

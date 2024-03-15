@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import RequireLoginModal from "../common/RequireLoginModal";
-import {Link, useLocation} from 'react-router-dom';
+import {useLocation} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { Editor } from '@toast-ui/react-editor';
@@ -38,7 +38,7 @@ const Modify = (props) =>{
         ['scrollSync']
       ]
 
-    {/** 모달 */}
+    //모달
     const [open, setOpen] = useState(false);
     const [requireLogin, setRequireSetLogin] = useState(false);
     const [success, setSuccess] = useState(false)
@@ -68,10 +68,9 @@ const Modify = (props) =>{
             ...postData,
             hashtags : value,
         });
-        console.log(postData);
       };
 
-    {/** 별점 */}
+    //별점
     const handleRateChange = (value) => {
         // 선택된 별점 값을 상태로 저장
         setPostData({
@@ -79,14 +78,14 @@ const Modify = (props) =>{
             rate : value,
         });
     };
-    {/**제목, 번호, 태그, 링크 */}
+    //제목, 번호, 태그, 링크
     const handleInputChange = (e) => {
         setPostData({
             ...postData,
             [e.target.name]: e.target.value,
         });
       };
-    {/**본문 */}
+    //본문
     const handelContent = () =>{
         const content = editorRef.current.getInstance().getMarkdown();
         setPostData({
@@ -101,13 +100,12 @@ const Modify = (props) =>{
         const postId = data.id;
         try {
             // POST 요청 보내기
-            const response = await axios.put(`http://localhost:8080/post/update/${postId}`, postData,{
+            await axios.put(`http://localhost:8080/post/update/${postId}`, postData,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
                 },
             });
-            console.log('POST 요청 응답:', response.data);
             setSuccess(true) // 게시글 저장 후 모달 띄우기
             setOpen(false) // 게시글을 저장하시겠습니까 닫기
         } catch (error) {
@@ -120,12 +118,11 @@ const Modify = (props) =>{
         const token = Cookies.get('token');
         try {
             // 토큰 검증하기
-            const response = await axios.get('http://localhost:8080/auth/verify', {
+            await axios.get('http://localhost:8080/auth/verify', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     },
                 });
-            console.log(response.status)
         } catch (error) {
             await setRequireSetLogin(true)
             console.error('로그인 토큰 검증에 실패하셨습니다.', error);
@@ -133,7 +130,6 @@ const Modify = (props) =>{
     }
     useEffect(()=>{
         verifyToken();
-        console.log(data)
     }, [])
    
     return(

@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import RequireLoginModal from "../common/RequireLoginModal";
-import {Link} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { Editor } from '@toast-ui/react-editor';
@@ -37,7 +36,7 @@ const Post = () =>{
         ['scrollSync']
       ]
 
-    {/** 모달 */}
+    //모달
     const [open, setOpen] = useState(false);
     const [requireLogin, setRequireSetLogin] = useState(false);
     const [success, setSuccess] = useState(false)
@@ -71,7 +70,7 @@ const Post = () =>{
         });
       };
 
-    {/** 별점 */}
+    //별점
     const handleRateChange = (value) => {
         // 선택된 별점 값을 상태로 저장
         setPostData({
@@ -79,7 +78,7 @@ const Post = () =>{
             rate : value,
         });
     };
-    {/**제목, 번호, 태그, 링크 */}
+    //제목, 번호, 태그, 링크
     const handleInputChange = (e) => {
         setPostData({
             ...postData,
@@ -87,7 +86,7 @@ const Post = () =>{
         });
       };
 
-    {/**본문 */}
+    //본문
     const handelContent = () =>{
         const content = editorRef.current.getInstance().getMarkdown();
         setPostData({
@@ -96,7 +95,7 @@ const Post = () =>{
         });
     }
 
-    {/** 알람시간 */}
+    //알람시간
     const setAlarm = (date, dateString) =>{
         author_alarm(dateString);
     }
@@ -105,16 +104,14 @@ const Post = () =>{
         e.preventDefault();
 
         const token = Cookies.get('token');
-        console.log(postData)
         try {
             // POST 요청 보내기
-            const response = await axios.post('http://localhost:8080/post/store', postData,{
+            await axios.post('http://localhost:8080/post/store', postData,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
                 },
             });
-            console.log('POST 요청 응답:', response.data);
             setSuccess(true) // 게시글 저장 후 모달 띄우기
             setOpen(false) // 게시글을 저장하시겠습니까 닫기
         } catch (error) {
@@ -127,12 +124,11 @@ const Post = () =>{
         const token = Cookies.get('token');
         try {
             // 토큰 검증하기
-            const response = await axios.get('http://localhost:8080/auth/verify', {
+            await axios.get('http://localhost:8080/auth/verify', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     },
                 });
-            console.log(response.status)
         } catch (error) {
             await setRequireSetLogin(true)
             console.error('로그인 토큰 검증에 실패하셨습니다.', error);
@@ -141,11 +137,11 @@ const Post = () =>{
 
     const author_alarm = async (dateString) =>{  
         const messaging = getMessaging();
-        console.log("권한 요청 중...");
+        //console.log("권한 요청 중...");
         try{
             const permission = await Notification.requestPermission();    
             if (permission === "granted") {
-                console.log("알림 권한이 허용됨");
+                //console.log("알림 권한이 허용됨");
                 const currentToken = await getToken(messaging, { vapidKey: process.env.REACT_APP_VAPID_KEY });
                 if(currentToken){
                     setPostData({
@@ -153,13 +149,13 @@ const Post = () =>{
                         alarm : dateString,
                         token : currentToken, //토큰 서버에 보내기
                     });
-                    console.log(`푸시 토큰 발급 완료 : ${currentToken}`)
+                    //console.log(`푸시 토큰 발급 완료 : ${currentToken}`)
                 } else {
-                console.log('No registration token available. Request permission to generate one.');
+                    console.log('No registration token available. Request permission to generate one.');
                 }
             }
         }catch(err){
-            console.log('error', err);
+            console.error('error', err);
         }
     }
 

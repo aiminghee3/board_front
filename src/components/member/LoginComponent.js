@@ -2,14 +2,9 @@ import React, { useState } from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import { useRecoilState } from 'recoil';
-import { authorCheck } from '../../atom';
-import AlartModal from "../common/AlartModal";
 
 const LoginComponent = () => {
     const navigate = useNavigate();
-
-    const [author, setAuthor] = useRecoilState(authorCheck);
 
     const [formData, setFormData] = useState({
       email: '',
@@ -81,9 +76,11 @@ const LoginComponent = () => {
                     비밀번호
                   </label>
                   <div className="text-sm">
+                    {/**
                     <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                       비밀번호를 잊으셨나요?
                     </a>
+                     */}
                   </div>
                 </div>
                 <div className="mt-2">
