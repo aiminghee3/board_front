@@ -118,7 +118,7 @@ const Modify = (props) =>{
         const token = Cookies.get('token');
         try {
             // 토큰 검증하기
-            await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8080/auth/verify`, {
+            await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8000/auth/verify`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     },

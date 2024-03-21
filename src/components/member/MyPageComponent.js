@@ -16,7 +16,7 @@ const MyPageComponent = () =>{
         const token = Cookies.get('token');
         try {
             // 서버의 API 엔드포인트에 GET 요청을 보냅니다.
-            const response = await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8080/post/${memberId}`, {
+            const response = await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8000/post/${memberId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     },

@@ -31,7 +31,7 @@ const Detail = (props) =>{
         handleCancel();
         try {
             // 게시글 삭제 요청
-            await axios.delete(`http://${process.env.REACT_APP_BASE_URL}:8080/post/delete/${postId}`);
+            await axios.delete(`http://${process.env.REACT_APP_BASE_URL}:8000/post/delete/${postId}`);
     
             // 삭제가 성공하면 화면에서 게시글을 업데이트하거나 다시 불러올 수 있습니다.
             // 여기에서는 간단히 콘솔에 메시지 출력으로 대체합니다.
