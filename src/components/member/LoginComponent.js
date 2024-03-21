@@ -6,6 +6,8 @@ import axios from 'axios';
 const LoginComponent = () => {
     const navigate = useNavigate();
 
+    const [login, setLogin] = useState(false);
+
     const [formData, setFormData] = useState({
       email: '',
       password: '',
@@ -26,7 +28,6 @@ const LoginComponent = () => {
       e.preventDefault();
       try {
         const response = await axios.post(`http://${process.env.REACT_APP_BASE_URL}:8080/auth/login`, formData);
-
         if(response.status === 200){
           Cookies.set('token', response.data.token);
           Cookies.set('id', response.data.id);
@@ -34,6 +35,7 @@ const LoginComponent = () => {
         }
       } catch (error) {
         console.error('Error:', error);
+        setLogin(true)
       }
     };
 
@@ -97,6 +99,7 @@ const LoginComponent = () => {
               </div>
   
               <div>
+                {login ? <div className = "h-1 pb-2 text-sm mb-5 text-red-400 font-medium">일치하는 계정이 없습니다.</div> : <></>}
                 <button
                   type="submit"
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

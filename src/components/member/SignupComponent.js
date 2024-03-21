@@ -10,8 +10,6 @@ const SignupComponent = () =>{
     const [formData, setFormData] = useState({
         email: '',
         password: '',
-        //confirmPassword: '',
-        //termsAccepted: false,
       });
     
       const handleChange = (e) => {
