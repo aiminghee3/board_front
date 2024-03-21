@@ -44,7 +44,7 @@ const Main = () =>{
     const getData = async() =>{
         try {
             // 서버의 API 엔드포인트에 GET 요청을 보냅니다.
-            const response = await axios.get('http://localhost:8080/post/get/all');
+            const response = await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8080/post/get/all`);
             // 응답에서 필요한 데이터를 추출하여 상태에 저장합니다.
             await setData(response.data);
             await setOriginData(response.data);

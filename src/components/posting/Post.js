@@ -106,7 +106,7 @@ const Post = () =>{
         const token = Cookies.get('token');
         try {
             // POST 요청 보내기
-            await axios.post('http://localhost:8080/post/store', postData,{
+            await axios.post(`http://${process.env.REACT_APP_BASE_URL}:8080/post/store`, postData,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -124,7 +124,7 @@ const Post = () =>{
         const token = Cookies.get('token');
         try {
             // 토큰 검증하기
-            await axios.get('http://localhost:8080/auth/verify', {
+            await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8080/auth/verify`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     },

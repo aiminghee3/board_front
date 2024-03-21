@@ -100,7 +100,7 @@ const Modify = (props) =>{
         const postId = data.id;
         try {
             // POST 요청 보내기
-            await axios.put(`http://localhost:8080/post/update/${postId}`, postData,{
+            await axios.put(`http://${process.env.REACT_APP_BASE_URL}:8080/post/update/${postId}`, postData,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -118,7 +118,7 @@ const Modify = (props) =>{
         const token = Cookies.get('token');
         try {
             // 토큰 검증하기
-            await axios.get('http://localhost:8080/auth/verify', {
+            await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8080/auth/verify`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     },

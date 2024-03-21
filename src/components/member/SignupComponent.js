@@ -25,7 +25,7 @@ const SignupComponent = () =>{
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post('http://localhost:8080/auth/signup', formData);
+          const response = await axios.post(`http://${process.env.REACT_APP_BASE_URL}:8080/auth/signup`, formData);
           if(response.status === 200){
             navigate('/login');
           }
