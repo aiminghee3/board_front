@@ -24,7 +24,6 @@ const LoginComponent = () => {
     };
 
     const handleSubmit = async (e) => {
-
       e.preventDefault();
       try {
         const response = await axios.post(`http://${process.env.REACT_APP_BASE_URL}:8000/auth/login`, formData);
