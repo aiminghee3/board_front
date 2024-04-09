@@ -96,11 +96,12 @@ const Modify = (props) =>{
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const token = Cookies.get('token');
+        const token = Cookies.get('accessToken');
         const postId = data.id;
+        const userId = data.user.id;
         try {
             // POST 요청 보내기
-            await axios.put(`http://${process.env.REACT_APP_BASE_URL}:8080/post/update/${postId}`, postData,{
+            await axios.put(`https://${process.env.REACT_APP_BASE_URL}:8080/post/update/${postId}/${userId}`, postData,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -114,22 +115,44 @@ const Modify = (props) =>{
     };
 
     
-    const verifyToken = async () =>{
-        const token = Cookies.get('token');
-        try {
-            // 토큰 검증하기
-            await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8000/auth/verify`, {
+    // Refresh토큰 검증
+    const verifyRefreshToken = async (refreshToken) =>{
+        try{
+            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/token/refresh`, null, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    },
-                });
-        } catch (error) {
-            await setRequireSetLogin(true)
+                    'Authorization': `Bearer ${refreshToken}`,
+                },
+            });
+            if(response.status === 200){
+                Cookies.set('accessToken', response.config.headers.Authorization.split(' ')[1]);
+            }
+            else{
+                await setRequireSetLogin(true);
+            }
+        }catch(error){
+            await setRequireSetLogin(true);
             console.error('로그인 토큰 검증에 실패하셨습니다.', error);
         }
     }
+
+    //Access토큰 검증
+    const verifyAccessToken = async () =>{
+        const accessToken = Cookies.get('accessToken');
+        const refreshToken = Cookies.get('refreshToken');
+        try {
+            // access 토큰 검증하기
+            await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/token/access`, null, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+            });
+        } catch (error) {
+            //Access토큰 검증 후 실패하면 RefreshToken검증
+            verifyRefreshToken(refreshToken);
+        }
+    }
     useEffect(()=>{
-        verifyToken();
+        verifyAccessToken();
     }, [])
    
     return(
@@ -179,7 +202,7 @@ const Modify = (props) =>{
                         width: '100%',
                     }}
                     placeholder="Please select"
-                    defaultValue={data.Hashtags.map(hashtag => hashtag.name)}
+                    defaultValue={data.postHashtags.map(item => item.hashtag.tag)}
                     onChange={handleChange}
                     options={[
                         { value: '백준', label: '백준' },

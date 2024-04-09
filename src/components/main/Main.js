@@ -44,10 +44,11 @@ const Main = () =>{
     const getData = async() =>{
         try {
             // 서버의 API 엔드포인트에 GET 요청을 보냅니다.
-            const response = await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8000/post/get/all`);
+            const response = await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8080/post/getAll`);
             // 응답에서 필요한 데이터를 추출하여 상태에 저장합니다.
-            await setData(response.data);
-            await setOriginData(response.data);
+            await setData(response.data.post);
+            await setOriginData(response.data.post);
+            console.log(response.data.post)
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
@@ -68,7 +69,8 @@ const Main = () =>{
      */
         useEffect(()=>{            
             const filteredData = originData && originData.filter((problem) => {
-                const hashtags = problem.Hashtags.map((tag) => tag.name);
+                const hashtags = problem.postHashtags.map((tag) => tag.hashtag.tag);
+                console.log(problem)
                 if(selectedButtons.includes('전체') || selectedButtons.length === 0){
                     return originData;
                 }
@@ -121,9 +123,9 @@ const Main = () =>{
                     <div className = "h-8 w-full flex justify-between items-center">
 
                         <div className = "flex">
-                        {item.Hashtags.map((item) => (
+                        {item.postHashtags.map((item) => (
                             <div key = {item.id} className = "bg-gray-100 rounded-lg px-3 py-1 flex justify-center items-center mr-2">
-                                <button className = "text-green-600 text-xs">{item.name}</button>
+                                <button className = "text-green-600 text-xs">{item.hashtag.tag}</button>
                             </div>
                         ))}
                         </div>

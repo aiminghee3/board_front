@@ -22,10 +22,10 @@ const Writing = () =>{
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        const token = Cookies.get('token');
+        const token = Cookies.get('accessToken');
         try {
           // POST 요청 보내기
-          const response = await axios.post(`http://${process.env.REACT_APP_BASE_URL}:8000/post/store`, postData,{
+          const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/post/store`, postData,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,

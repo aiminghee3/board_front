@@ -16,7 +16,7 @@ const MyPageComponent = () =>{
         const token = Cookies.get('token');
         try {
             // 서버의 API 엔드포인트에 GET 요청을 보냅니다.
-            const response = await axios.get(`http://${process.env.REACT_APP_BASE_URL}:8000/post/${memberId}`, {
+            const response = await axios.get(`https://${process.env.REACT_APP_BASE_URL}:8080/${memberId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     },
@@ -33,22 +33,48 @@ const MyPageComponent = () =>{
 
     //로그인 검증하기
     const [requireLogin, setRequireSetLogin] = useState(false);
-    const verifyToken = async () =>{
-        const token = Cookies.get('token');
-        try {
-            // 토큰 검증하기
-            await axios.get('http://localhost:8080/auth/verify', {
+
+    // Refresh토큰 검증
+    const verifyRefreshToken = async (refreshToken) =>{
+        try{
+            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/token/refresh`, null, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    },
-                });
-        } catch (error) {
-            await setRequireSetLogin(true)
+                    'Authorization': `Bearer ${refreshToken}`,
+                },
+            });
+            if(response.status === 200){
+                Cookies.set('accessToken', response.config.headers.Authorization.split(' ')[1]);
+            }
+            else{
+                await setRequireSetLogin(true);
+            }
+        }catch(error){
+            await setRequireSetLogin(true);
             console.error('로그인 토큰 검증에 실패하셨습니다.', error);
         }
     }
+
+    //Access토큰 검증
+    const verifyAccessToken = async () =>{
+        const accessToken = Cookies.get('accessToken');
+        const refreshToken = Cookies.get('refreshToken');
+        try {
+            // access 토큰 검증하기
+            await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/token/access`, null, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+            });
+        } catch (error) {
+            //Access토큰 검증 후 실패하면 RefreshToken검증
+            verifyRefreshToken(refreshToken);
+            console.log('test');
+        }
+    }
+
     const logout = () =>{
-        document.cookie = 'token =; Max-Age=-99999999;';
+        document.cookie = 'accessToken =; Max-Age=-99999999;';
+        document.cookie = 'refreshToken =; Max-Age=-99999999;';
         document.cookie = 'id =; Max-Age=-99999999;';
         navigate('/');  
         // Setting a cookie's Max-Age to a negative value will cause it to expire immediately
@@ -57,9 +83,9 @@ const MyPageComponent = () =>{
      * 로그인검증
      * 데이터 가져오기
      */
-    useEffect(()=>{
-        verifyToken();
-        getData(); 
+    useEffect( ()=>{
+        verifyAccessToken();
+        //getData(); 
     }, [])
     return(
         <>

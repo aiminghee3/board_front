@@ -26,10 +26,13 @@ const LoginComponent = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post(`http://${process.env.REACT_APP_BASE_URL}:8000/auth/login`, formData);
+        const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/user/login`, formData);
+        console.log(response.data);
+
         if(response.status === 200){
-          Cookies.set('token', response.data.token);
-          Cookies.set('id', response.data.id);
+          Cookies.set('accessToken', response.data.user.accessToken);
+          Cookies.set('refreshToken', response.data.user.refreshToken);
+          Cookies.set('id', response.data.user.user.id);
           navigate('/');
         }
       } catch (error) {
@@ -44,7 +47,7 @@ const LoginComponent = () => {
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <img
               className="mx-auto h-10 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+              src="httpss://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
               alt="Your Company"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">

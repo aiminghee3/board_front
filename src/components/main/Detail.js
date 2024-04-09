@@ -12,6 +12,7 @@ const Detail = (props) =>{
     const location = useLocation();
     const navigate = useNavigate();
     const data = location.state.data;
+    const date = new Date(data.alarm).toISOString().split('T')[0];
 
     
     const [open, setOpen] = useState(false);
@@ -28,10 +29,16 @@ const Detail = (props) =>{
       };
 
     const deletePage = async (postId) =>{
+        const token = Cookies.get('accessToken');
         handleCancel();
         try {
             // 게시글 삭제 요청
-            await axios.delete(`http://${process.env.REACT_APP_BASE_URL}:8000/post/delete/${postId}`);
+            await axios.delete(`http://${process.env.REACT_APP_BASE_URL}:8080/post/delete/${postId}/${data.user.id}`,{
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+                }
+            });
     
             // 삭제가 성공하면 화면에서 게시글을 업데이트하거나 다시 불러올 수 있습니다.
             // 여기에서는 간단히 콘솔에 메시지 출력으로 대체합니다.
@@ -41,12 +48,13 @@ const Detail = (props) =>{
             console.error('게시글 삭제에 실패했습니다.', error.message);
         }
     }
-    const [authority, setAuthorty] = useState(false)
+    const [authority, setAuthority] = useState(false)
 
     useEffect(()=>{
-        if(parseInt(Cookies.get('id')) === data.memberId)
-            setAuthorty(true)
+        if(parseInt(Cookies.get('id')) === data.user.id)
+            setAuthority(true)
     }, [])
+
     return(
         <>
         <div className = "h-full max-w-3xl mx-auto">
@@ -61,19 +69,19 @@ const Detail = (props) =>{
                         <Rate className = "text-md pt-0.5" allowHalf defaultValue={data.rate} disabled/>
                         <div className = "flex">
                         <div className = "ml-2">알림 예정일</div>
-                        <div className = "ml-2 font-semibold">(업데이트 예정)</div>
+                        <div className = "ml-2 font-semibold">{date}</div>
                         </div>
                         <a href = {data.problem_link} className = "underline text-gray-500 ml-3" target="_blank" rel="noopener noreferrer">문제링크</a>
                     </div>
-                    <div className = "font-extralight text-gray-600 text-sm">작성자 : {data.Member.email}</div>
+                    <div className = "font-extralight text-gray-600 text-sm">작성자 : {data.user.email}</div>
                 </div>
 
                 <div className = "h-15 w-full mt-4 flex justify-between items-center">
 
                         <div className = "flex">
-                            {data.Hashtags.map((item) => (
+                            {data.postHashtags.map((item) => (
                                 <div key = {item.id} className = "bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
-                                    <button className = "text-green-600 text-xs">{item.name}</button>
+                                    <button className = "text-green-600 text-xs">{item.hashtag.tag}</button>
                                 </div>
                             ))}
                         </div>
