@@ -101,7 +101,7 @@ const Modify = (props) =>{
         const userId = data.user.id;
         try {
             // POST 요청 보내기
-            await axios.put(`https://${process.env.REACT_APP_BASE_URL}:8080/post/update/${postId}/${userId}`, postData,{
+            await axios.put(`https://${process.env.REACT_APP_BASE_URL}/post/update/${postId}/${userId}`, postData,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -118,7 +118,7 @@ const Modify = (props) =>{
     // Refresh토큰 검증
     const verifyRefreshToken = async (refreshToken) =>{
         try{
-            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/token/refresh`, null, {
+            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/token/refresh`, null, {
                 headers: {
                     'Authorization': `Bearer ${refreshToken}`,
                 },
@@ -141,7 +141,7 @@ const Modify = (props) =>{
         const refreshToken = Cookies.get('refreshToken');
         try {
             // access 토큰 검증하기
-            await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/token/access`, null, {
+            await axios.post(`https://${process.env.REACT_APP_BASE_URL}/token/access`, null, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                 },

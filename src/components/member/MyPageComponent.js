@@ -16,7 +16,7 @@ const MyPageComponent = () =>{
         const token = Cookies.get('token');
         try {
             // 서버의 API 엔드포인트에 GET 요청을 보냅니다.
-            const response = await axios.get(`https://${process.env.REACT_APP_BASE_URL}:8080/${memberId}`, {
+            const response = await axios.get(`https://${process.env.REACT_APP_BASE_URL}/${memberId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     },
@@ -37,7 +37,7 @@ const MyPageComponent = () =>{
     // Refresh토큰 검증
     const verifyRefreshToken = async (refreshToken) =>{
         try{
-            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/token/refresh`, null, {
+            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/token/refresh`, null, {
                 headers: {
                     'Authorization': `Bearer ${refreshToken}`,
                 },
@@ -60,7 +60,7 @@ const MyPageComponent = () =>{
         const refreshToken = Cookies.get('refreshToken');
         try {
             // access 토큰 검증하기
-            await axios.post(`https://${process.env.REACT_APP_BASE_URL}:8080/token/access`, null, {
+            await axios.post(`https://${process.env.REACT_APP_BASE_URL}/token/access`, null, {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                 },

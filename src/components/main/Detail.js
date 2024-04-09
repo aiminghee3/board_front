@@ -33,7 +33,7 @@ const Detail = (props) =>{
         handleCancel();
         try {
             // 게시글 삭제 요청
-            await axios.delete(`http://${process.env.REACT_APP_BASE_URL}:8080/post/delete/${postId}/${data.user.id}`,{
+            await axios.delete(`http://${process.env.REACT_APP_BASE_URL}/post/delete/${postId}/${data.user.id}`,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
