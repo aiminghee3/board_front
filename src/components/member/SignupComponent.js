@@ -26,7 +26,7 @@ const SignupComponent = () =>{
         try {
           const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/user/signup`, formData);
           console.log('요청 전송됨')
-          if(response.status === 200){
+          if(response.status === 201){
             navigate('/login');
           }
         } catch (error) {
@@ -41,7 +41,7 @@ const SignupComponent = () =>{
         <section class="bg-gray-50">
             <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
                 <a href="/" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 ">
-                    <img class="w-8 h-8 mr-2" src="httpss://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="logo"/>
+                    <img class="w-8 h-8 mr-2" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="logo"/>
                     Algorithm Review
                 </a>
                 <div class="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 ">

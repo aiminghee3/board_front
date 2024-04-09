@@ -107,7 +107,7 @@ const Post = () =>{
         const token = Cookies.get('accessToken');
         try {
             // POST 요청 보내기
-            await axios.post(`httpss://${process.env.REACT_APP_BASE_URL}/post/create`, postData,{
+            await axios.post(`https://${process.env.REACT_APP_BASE_URL}/post/create`, postData,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -124,7 +124,7 @@ const Post = () =>{
     // Refresh토큰 검증
     const verifyRefreshToken = async (refreshToken) =>{
         try{
-            const response = await axios.post(`httpss://${process.env.REACT_APP_BASE_URL}/token/refresh`, null, {
+            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/token/refresh`, null, {
                 headers: {
                     'Authorization': `Bearer ${refreshToken}`,
                 },
