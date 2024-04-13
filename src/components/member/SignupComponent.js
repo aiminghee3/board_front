@@ -6,6 +6,7 @@ import axios from 'axios';
 const SignupComponent = () =>{
     const navigate = useNavigate();
 
+    const [error, setError] = useState('');
     const [email, setEmail] = useState(false);
     const [formData, setFormData] = useState({
         email: '',
@@ -31,6 +32,7 @@ const SignupComponent = () =>{
           }
         } catch (error) {
           console.error('Error:', error);
+          setError(error);
           setEmail(true)
           console.log('요청실패')
         }
@@ -93,7 +95,7 @@ const SignupComponent = () =>{
                                  
                             </div>
                             */}
-                            {email ? <div className = "h-1 pb-2 text-sm text-red-400 font-medium">이미 존재하는 이메일입니다.</div> : <></>}
+                            {email ? <div className = "h-1 pb-2 text-sm text-red-400 font-medium">{error}</div> : <></>}
                             <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">계정 생성</button>
                             <p class="text-sm font-light text-gray-500">
                                 이미 계정이 있으신가요? <Link to='/login' class="font-medium text-black hover:underline">로그인</Link>
