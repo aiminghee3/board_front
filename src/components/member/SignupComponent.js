@@ -23,10 +23,8 @@ const SignupComponent = () =>{
     
       const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('실행됨')
         try {
           const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/user/signup`, formData);
-          console.log('요청 전송됨')
           if(response.status === 201){
             navigate('/login');
           }

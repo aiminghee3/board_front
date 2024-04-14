@@ -27,7 +27,6 @@ const LoginComponent = () => {
       e.preventDefault();
       try {
         const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/user/login`, formData);
-        console.log(response.data);
 
         if(response.status === 200){
           Cookies.set('accessToken', response.data.user.accessToken);

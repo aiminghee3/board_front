@@ -68,7 +68,6 @@ const MyPageComponent = () =>{
         } catch (error) {
             //Access토큰 검증 후 실패하면 RefreshToken검증
             verifyRefreshToken(refreshToken);
-            console.log('test');
         }
     }
 
