@@ -30,7 +30,7 @@ const SignupComponent = () =>{
           }
         } catch (error) {
           console.error('Error:', error);
-          setError(error);
+          //setError(error);
           setEmail(true)
           console.log('요청실패')
         }
