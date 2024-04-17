@@ -78,21 +78,6 @@ const SignupComponent = () =>{
                                 placeholder="••••••••" 
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required=""/>
                             </div>
-                            {/**
-                            <div class="flex items-start">
-                                <div class="flex items-center h-5">
-                                    <input 
-                                    id="terms" 
-                                    aria-describedby="terms" 
-                                    type="checkbox" 
-                                    class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300" required=""/>
-                                </div>
-                                <div class="ml-3 text-sm">
-                                    <label for="terms" class="font-light text-gray-500">I accept the <a class="font-medium text-primary-600 hover:underline" href="#">Terms and Conditions</a></label>
-                                </div>
-                                 
-                            </div>
-                            */}
                             {email ? <div className = "h-1 pb-2 text-sm text-red-400 font-medium">{error}</div> : <></>}
                             <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">계정 생성</button>
                             <p class="text-sm font-light text-gray-500">
