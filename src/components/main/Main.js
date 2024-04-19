@@ -47,7 +47,6 @@ const Main = () =>{
             // 응답에서 필요한 데이터를 추출하여 상태에 저장합니다.
             await setData(response.data.post);
             await setOriginData(response.data.post);
-            console.log(response.data.post)
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
