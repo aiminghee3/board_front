@@ -35,46 +35,45 @@ const MyPageComponent = () =>{
     const [requireLogin, setRequireSetLogin] = useState(false);
 
     // Refresh토큰 검증
-    const verifyRefreshToken = async (refreshToken) =>{
+    const verifyRefreshToken = async () =>{
+        const refreshToken = Cookies.get('refreshToken');
         try{
-            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/token/refresh`, null, {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`, {
                 headers: {
                     'Authorization': `Bearer ${refreshToken}`,
                 },
             });
             if(response.status === 200){
-                Cookies.set('accessToken', response.config.headers.Authorization.split(' ')[1]);
+                Cookies.set('accessToken', response.data.accessToken);
             }
             else{
                 await setRequireSetLogin(true);
             }
         }catch(error){
             await setRequireSetLogin(true);
-            console.error('로그인 토큰 검증에 실패하셨습니다.', error);
+            console.error('로그인 검증에 실패하셨습니다.', error);
         }
     }
 
     //Access토큰 검증
     const verifyAccessToken = async () =>{
         const accessToken = Cookies.get('accessToken');
-        const refreshToken = Cookies.get('refreshToken');
         try {
             // access 토큰 검증하기
-            await axios.post(`https://${process.env.REACT_APP_BASE_URL}/token/access`, null, {
+            await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/access`,  {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                 },
             });
         } catch (error) {
             //Access토큰 검증 후 실패하면 RefreshToken검증
-            verifyRefreshToken(refreshToken);
+            await verifyRefreshToken();
         }
     }
 
     const logout = () =>{
         document.cookie = 'accessToken =; Max-Age=-99999999;';
         document.cookie = 'refreshToken =; Max-Age=-99999999;';
-        document.cookie = 'id =; Max-Age=-99999999;';
         navigate('/');  
         // Setting a cookie's Max-Age to a negative value will cause it to expire immediately
     }

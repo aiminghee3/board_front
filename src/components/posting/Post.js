@@ -53,21 +53,19 @@ const Post = () =>{
       };
 
     const [postData, setPostData] = useState({
-        userId : Cookies.get('id'),
         title : '',
-        problem_number : '',
+        problem_number : null,
         problem_link : '',
-        content : '',
         rate : 0,
-        token : null,
-        alarm : null,
-        hashtags : [],
+        content : null,
+        //alarm : null,
+        tags : [],
     });
 
     const handleChange = (value) => {
         setPostData({
             ...postData,
-            hashtags : value,
+            tags : value.map(String),
         });
       };
 
@@ -87,6 +85,16 @@ const Post = () =>{
         });
       };
 
+    const handleProblemNumberChange = (event) => {
+        const { name, value } = event.target;
+        // 입력 값을 정수로 변환합니다.
+        const intValue = value === '' ? '' : parseInt(value, 10);
+        setPostData((prevData) => ({
+            ...prevData,
+            [name]: intValue,
+        }));
+    };
+
     //본문
     const handelContent = () =>{
         const content = editorRef.current.getInstance().getMarkdown();
@@ -98,16 +106,16 @@ const Post = () =>{
 
     //알람시간
     const setAlarm = (date, dateString) =>{
-        author_alarm(dateString);
+        console.log(new Date(dateString));
+        //author_alarm(new Date(dateString));
     }
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         const token = Cookies.get('accessToken');
         try {
             // POST 요청 보내기
-            await axios.post(`https://${process.env.REACT_APP_BASE_URL}/post/create`, postData,{
+            await axios.post(`${process.env.REACT_APP_BASE_URL}/post`, postData,{
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
@@ -122,39 +130,39 @@ const Post = () =>{
 
     
     // Refresh토큰 검증
-    const verifyRefreshToken = async (refreshToken) =>{
+    const verifyRefreshToken = async () =>{
+        const refreshToken = Cookies.get('refreshToken');
         try{
-            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/token/refresh`, null, {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`, {
                 headers: {
                     'Authorization': `Bearer ${refreshToken}`,
                 },
             });
             if(response.status === 200){
-                Cookies.set('accessToken', response.config.headers.Authorization.split(' ')[1]);
+                Cookies.set('accessToken', response.data.accessToken);
             }
             else{
                 await setRequireSetLogin(true);
             }
         }catch(error){
             await setRequireSetLogin(true);
-            console.error('로그인 토큰 검증에 실패하셨습니다.', error);
+            console.error('로그인 검증에 실패하셨습니다.', error);
         }
     }
 
     //Access토큰 검증
     const verifyAccessToken = async () =>{
         const accessToken = Cookies.get('accessToken');
-        const refreshToken = Cookies.get('refreshToken');
         try {
             // access 토큰 검증하기
-            await axios.post(`https://${process.env.REACT_APP_BASE_URL}/token/access`, null, {
+            await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/access`,  {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
                 },
             });
         } catch (error) {
             //Access토큰 검증 후 실패하면 RefreshToken검증
-            verifyRefreshToken(refreshToken);
+            await verifyRefreshToken();
         }
     }
 
@@ -170,7 +178,7 @@ const Post = () =>{
                     setPostData({
                         ...postData,
                         alarm : dateString,
-                        token : currentToken, //토큰 서버에 보내기
+                        //token : currentToken, //토큰 서버에 보내기
                     });
                     //console.log(`푸시 토큰 발급 완료 : ${currentToken}`)
                 } else {
@@ -202,11 +210,11 @@ const Post = () =>{
 
                 <input
                 className = "w-full outline-none text-lg"
-                type="text"
+                type="number"
                 id="problem_number"
                 name = "problem_number"
                 value={postData.problem_number}
-                onChange={handleInputChange}
+                onChange={handleProblemNumberChange}
                 placeholder="문제번호를 입력하세요"/>
                 <div className = "w-10 border border-gray-700 mb-1"/>
                  
@@ -233,27 +241,67 @@ const Post = () =>{
                         width: '100%',
                     }}
                     placeholder="Please select"
-                    defaultValue={['tag Sample']}
+                    defaultValue={['브루트포스']}
                     onChange={handleChange}
                     options={[
-                        { value: '백준', label: '백준' },
-                        { value: '프로그래머스', label: '프로그래머스' },
-                        { value: 'DP', label: 'DP' },
-                        { value: '브루트포스', label: '브루트포스' },
-                        { value: '그리디', label: '그리디' },
-                        { value: '그래프', label: '그래프'},
-                        { value: '문자열', label: '문자열'},
-                        { value: '정렬', label: '정렬'},
-                        { value: '스택', label: '스택'},
-                        { value: '큐', label: '큐'},
+                        { value: 1, label: '브루트포스' },
+                        { value: 2, label: '그리디' },
+                        { value: 3, label: 'BFS' },
+                        { value: 4, label: 'DFS'},
+                        { value: 5, label: 'DP'},
+                        { value: 6, label: '그래프'},
+                        { value: 7, label: '정렬'},
+                        { value: 8, label: '문자열'},
                     ]}
                     />
                 </Space>
 
                 <div className = "flex h-8 items-center justify-between">
-                    <div className = "flex items-center">
-                        <div className = "font-medium mr-2">중요도</div>
-                        <Rate className = "text-md" onChange={handleRateChange}/>
+                    <div className = "flex items-center w-full justify-start">
+                        <Space className = "h-8 min-w-32"
+                            direction="vertical"
+                        >
+                            <Select
+                                className = "w-full"
+                                mode="single"
+                                allowClear
+                                placeholder="난이도 선택"
+                                defaultValue={['브론즈 5']}
+                                onChange={handleRateChange}
+                                options={[
+                                    { value: 1, label: '브론즈 1' },
+                                    { value: 2, label: '브론즈 2' },
+                                    { value: 3, label: '브론즈 3' },
+                                    { value: 4, label: '브론즈 4' },
+                                    { value: 5, label: '브론즈 5' },
+                                    { value: 6, label: '실버 1' },
+                                    { value: 7, label: '실버 2' },
+                                    { value: 8, label: '실버 3' },
+                                    { value: 9, label: '실버 4' },
+                                    { value: 10, label: '실버 5' },
+                                    { value: 11, label: '골드 1' },
+                                    { value: 12, label: '골드 2' },
+                                    { value: 13, label: '골드 3' },
+                                    { value: 14, label: '골드 4' },
+                                    { value: 15, label: '골드 5' },
+                                    { value: 16, label: '플래티넘 1' },
+                                    { value: 17, label: '플래티넘 2' },
+                                    { value: 18, label: '플래티넘 3' },
+                                    { value: 19, label: '플래티넘 4' },
+                                    { value: 20, label: '플래티넘 5' },
+                                    { value: 21, label: '다이아 1' },
+                                    { value: 22, label: '다이아 2' },
+                                    { value: 23, label: '다이아 3' },
+                                    { value: 24, label: '다이아 4' },
+                                    { value: 25, label: '다이아 5' },
+                                    { value: 26, label: '루비 1' },
+                                    { value: 27, label: '루비 2' },
+                                    { value: 28, label: '루비 3' },
+                                    { value: 29, label: '루비 4' },
+                                    { value: 30, label: '루비 5' },
+                                ]}
+                            />
+                        </Space>
                         <span className = "ml-4">알림설정</span><DatePicker  onChange={setAlarm} className = "ml-2"/>
                     </div>
                     <Button onClick={showModal} type="primary" className = "bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 작성</Button>

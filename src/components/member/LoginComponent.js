@@ -26,12 +26,10 @@ const LoginComponent = () => {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/user/login`, formData);
-
-        if(response.status === 200){
-          Cookies.set('accessToken', response.data.user.accessToken);
-          Cookies.set('refreshToken', response.data.user.refreshToken);
-          Cookies.set('id', response.data.user.user.id);
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, formData);
+        if(response.status === 201){
+          Cookies.set('accessToken', response.data.accessToken);
+          Cookies.set('refreshToken', response.data.refreshToken);
           navigate('/');
         }
       } catch (error) {
