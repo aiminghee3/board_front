@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Comment from "../posting/Comment";
-
+import {requestPermission} from "../../firebase-messaging-sw";
 
 const Main = () => {
     /**
@@ -58,6 +58,7 @@ const Main = () => {
      */
     useEffect(() => {
         const fetchData = async () => {
+            await requestPermission();
             await getData();
         };
         fetchData();
@@ -88,14 +89,14 @@ const Main = () => {
                 </div>
 
                 {/**태그 */}
-                <div className="h-8 w-full flex justify-between items-center">
-                    <div className="flex">
+                <div className="w-full flex flex-wrap justify-start items-center">
+                    <div className="flex flex-wrap">
                         {tags && tags.map((item) => (
                             <button key={item.id}
                                     className={`${selectedButtons.includes(item.tag)
                                         ? 'bg-gray-400 text-green-600 text-xs'
                                         : 'bg-gray-100 text-green-600 text-xs'
-                                    } rounded-xl px-3 py-1 flex justify-center items-center mr-2`}
+                                    } rounded-xl px-3 py-1 flex justify-center items-center mr-2 mb-2`}
                                     onClick={() => handleButtonClick(item)}
                             >
                                 {item.tag}
@@ -105,23 +106,23 @@ const Main = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mt-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm: mt-5">
                 {loading ? (
                     // 로딩 중일 경우 로딩 상태를 표시
                     <p>Loading...</p>
                 ) : (data && data.map((item) => (
-                    <Link to="/detail" state={{ data: item }} key={item.id} className="col-span-1 p-2 bg-white h-32 w-full border border-gray-400 rounded-xl hover:bg-gray-100">
+                    <Link to="/detail" state={{ data: item }} key={item.id} className="col-span-1 p-2 bg-white border border-gray-400 rounded-xl hover:bg-gray-100">
                         <div className="flex items-center w-full h-10 px-1">
                             <img src={item.image} alt="난이도" className="h-6 w-6 mr-1"/>
-                            <div className="font-normal text-2xl">{item.problem_number}</div>
+                            <div className="font-normal text-xl sm:text-2xl">{item.problem_number}</div>
                         </div>
                         <div className="h-10 w-full pl-2 mt-1">
-                        <div className="font-normal text-xl text-gray-700">{item.title}</div>
+                            <div className="font-normal text-lg sm:text-xl text-gray-700">{item.title}</div>
                         </div>
                         <div className="h-8 w-full flex justify-between items-center">
-                            <div className="flex">
+                            <div className="flex flex-wrap">
                                 {item.tags.map((tagItem, index) => (
-                                    <div key={index} className="bg-gray-100 rounded-lg px-3 py-1 flex justify-center items-center mr-2">
+                                    <div key={index} className="bg-gray-100 rounded-lg px-3 py-1 flex justify-center items-center mr-2 mb-2">
                                         <button className="text-green-600 text-xs">{tagItem}</button>
                                     </div>
                                 ))}

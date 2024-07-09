@@ -11,6 +11,7 @@ const SignupComponent = () =>{
     const [formData, setFormData] = useState({
         email: '',
         password: '',
+        passwordCheck : '',
       });
     
       const handleChange = (e) => {
@@ -23,23 +24,28 @@ const SignupComponent = () =>{
     
       const handleSubmit = async (e) => {
         e.preventDefault();
-        
+        console.log(formData);
         // 비밀번호가 특수문자가 최소 1개, 알파벳이 포함되어야 하며, 8~20글자 사이여야 함
         const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,20}$/;
-        if (!passwordRegex.test(formData.password)) {
+        if(formData.password !== formData.passwordCheck){
+            setError('비밀번호가 서로 일치하지 않습니다.');
+        }
+        else if (!passwordRegex.test(formData.password)) {
             setError('특수문자가 1개 알파벳 조합 8~20글자로 작성해주세요');
         }
         else{
+            console.log(formData);
             try {
-            const response = await axios.post(`https://${process.env.REACT_APP_BASE_URL}/user/signup`, formData);
-            if(response.status === 201){
-             navigate('/login');
-            }
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/signup`, formData);
+                if(response.status === 201){
+                 navigate('/login');
+                }
             } catch (error) {
-            console.error('Error:', error);
-            setError(error);
+                if(error.response.status === 409) {
+                setError('이미 존재하는 이메일입니다.');
+                }
             setEmail(true)
-            console.log('요청실패')
+            console.error('Error:', error);
             }
         }
       };
@@ -79,11 +85,12 @@ const SignupComponent = () =>{
                             </div>
                             <div>
                                 <label for="confirm-password" class="block mb-2 text-sm font-medium text-gray-900 ">비밀번호 확인</label>
-                                <input 
+                                <input
                                 type="password" 
-                                name="confirm-password" 
+                                name="passwordCheck"
                                 id="confirm-password" 
-                                placeholder="••••••••" 
+                                placeholder="••••••••"
+                                onChange={handleChange}
                                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required=""/>
                             </div>
                             {error ? <div className = "h-1 pb-2 text-sm text-red-400 font-medium">{error}</div> : <></>}

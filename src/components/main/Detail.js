@@ -111,29 +111,30 @@ const Detail = () => {
     return (
         <>
             <div className="h-full max-w-3xl mx-auto">
-                <div className="h-48 w-full border-b-2 pr-2">
+                <div className="sm:h-48 px-2 h-auto w-full border-b-2">
                     <div className="w-full h-16 flex items-center">
                         <img src={data.image} alt="난이도" className="h-8 w-8 mr-1"/>
-                        <div className="text-3xl font-semibold">{data.problem_number}</div>
+                        <div className="text-2xl sm:text-3xl font-semibold">{data.problem_number}</div>
                     </div>
-                    <div className="h-14 text-3xl ml-2 font-semibold pt-1">{data.title}</div>
-                    <div className="flex w-full h-6 justify-between items-center">
-                        <div className="flex">
-                            <div className="flex">
-                                <div className="ml-2">알림 예정일 : </div>
+                    <div className="h-14 text-2xl sm:text-3xl ml-2 font-semibold pt-1">{data.title}</div>
+                    <div className="flex w-full justify-between items-center">
+                        <div className="flex sm:justify-between flex-wrap sm:flex-nowrap">
+                            <div className="flex flex-wrap sm:flex-nowrap">
+                                <div className="ml-2">알림 예정일 :</div>
                                 <div className="ml-2 font-semibold">{data.alarm}</div>
                             </div>
-                            <a href={data.problem_link} className="underline text-gray-500 ml-3" target="_blank"
+                            <a href={data.problem_link} className="underline text-gray-500 ml-3 mt-2 sm:mt-0"
+                               target="_blank"
                                rel="noopener noreferrer">문제링크</a>
                         </div>
                         <div className="font-extralight text-gray-600 text-sm">작성자 : {data.email}</div>
                     </div>
                     <div className="h-15 w-full mt-4 flex justify-between items-center">
-                        <div className="flex">
+                        <div className="flex flex-wrap">
                             {data.hashtag.map((item, index) => (
                                 <div key={index}
-                                     className="bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2">
-                                    <button className="text-green-600 text-xs">{item.name}</button>
+                                     className="bg-gray-100 rounded-xl px-3 py-1 flex justify-center items-center mr-2 mb-2">
+                                <button className="text-green-600 text-xs">{item.name}</button>
                                 </div>
                             ))}
                         </div>
@@ -143,8 +144,8 @@ const Detail = () => {
                         </div> : null}
                     </div>
                 </div>
-                <div className="pt-4 px-2 w-full h-full">
-                {data.content ? <Viewer initialValue={data.content} /> : null}
+                <div className="pt-4 px-4 sm:px-2 w-full h-full">
+                    {data.content ? <Viewer initialValue={data.content} /> : null}
                 </div>
             </div>
             <Modal
