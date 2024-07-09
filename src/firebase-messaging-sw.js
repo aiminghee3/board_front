@@ -25,6 +25,7 @@ export async function requestPermission() {
                     console.log(`푸시 토큰 발급 완료 : ${token}`)
                 })
                 .catch((err) => {
+                    console.log(err);
                     console.log('푸시 토큰 가져오는 중에 에러 발생')
                 })
         } else if (permission === 'denied') {
