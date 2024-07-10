@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
+import {requestPermission} from "../../firebase-messaging-sw";
 
 const SignupComponent = () =>{
     const navigate = useNavigate();
@@ -12,6 +13,7 @@ const SignupComponent = () =>{
         email: '',
         password: '',
         passwordCheck : '',
+        fcmToken : '',
       });
     
       const handleChange = (e) => {
@@ -21,34 +23,41 @@ const SignupComponent = () =>{
           [name]: type === 'checkbox' ? checked : value,
         });
       };
-    
-      const handleSubmit = async (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        const fcmToken = await requestPermission();
+        if (fcmToken === null) {
+            setError('푸시 토큰을 가져오는 데 실패했습니다.');
+            return;
+        }
+
+        const tokenFormData = {
+            ...formData,
+            fcmToken: fcmToken
+        };
+
         // 비밀번호가 특수문자가 최소 1개, 알파벳이 포함되어야 하며, 8~20글자 사이여야 함
         const passwordRegex = /^(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,20}$/;
-        if(formData.password !== formData.passwordCheck){
+        if (formData.password !== formData.passwordCheck) {
             setError('비밀번호가 서로 일치하지 않습니다.');
-        }
-        else if (!passwordRegex.test(formData.password)) {
+        } else if (!passwordRegex.test(formData.password)) {
             setError('특수문자가 1개 알파벳 조합 8~20글자로 작성해주세요');
-        }
-        else{
-            console.log(formData);
+        } else {
             try {
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/signup`, formData);
-                if(response.status === 201){
-                 navigate('/login');
+                const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/signup`, tokenFormData);
+                if (response.status === 201) {
+                    navigate('/login');
                 }
             } catch (error) {
-                if(error.response.status === 409) {
-                setError('이미 존재하는 이메일입니다.');
+                if (error.response.status === 409) {
+                    setError('이미 존재하는 이메일입니다.');
                 }
-            setEmail(true)
-            console.error('Error:', error);
+                setEmail(true);
+                console.error('Error:', error);
             }
         }
-      };
+    };
 
     return (
         <>

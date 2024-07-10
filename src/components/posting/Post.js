@@ -20,10 +20,7 @@ import prism from 'prismjs';
 
 // Step 2. Import language files of prismjs that you need
 import 'prismjs/components/prism-clojure.js';
-
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
-//import { getMessaging, getToken } from 'firebase/messaging';
-import {requestPermission} from '../../firebase-messaging-sw';
 
 
 const Post = () =>{
@@ -59,8 +56,8 @@ const Post = () =>{
         problem_link : '',
         rate : 0,
         content : null,
-        //alarm : null,
-        tags : [],
+        alarm : null,
+        tags : [''],
     });
 
     const handleChange = (value) => {
@@ -106,14 +103,16 @@ const Post = () =>{
     }
 
     //알람시간
-    const setAlarm = (date, dateString) =>{
-        console.log(new Date(dateString));
-        //author_alarm(new Date(dateString));
+    const handleAlarm = (date, dateString) =>{
+        const dateObject = new Date(dateString);
+        setPostData({
+            ...postData,
+            alarm : dateObject,
+        });
     }
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        await requestPermission();
         const token = Cookies.get('accessToken');
         try {
             // POST 요청 보내기
@@ -168,31 +167,6 @@ const Post = () =>{
         }
     }
 
-    /**
-    const author_alarm = async (dateString) =>{  
-        const messaging = getMessaging();
-        //console.log("권한 요청 중...");
-        try{
-            const permission = await Notification.requestPermission();    
-            if (permission === "granted") {
-                //console.log("알림 권한이 허용됨");
-                const currentToken = await getToken(messaging, { vapidKey: process.env.REACT_APP_VAPID_KEY });
-                if(currentToken){
-                    setPostData({
-                        ...postData,
-                        alarm : dateString,
-                        //token : currentToken, //토큰 서버에 보내기
-                    });
-                    //console.log(`푸시 토큰 발급 완료 : ${currentToken}`)
-                } else {
-                    console.log('No registration token available. Request permission to generate one.');
-                }
-            }
-        }catch(err){
-            console.error('error', err);
-        }
-    }
-        */
     useEffect(()=>{
         verifyAccessToken();
     }, [])
@@ -245,7 +219,7 @@ const Post = () =>{
                                 width: '100%',
                             }}
                             placeholder="Please select"
-                            defaultValue={['브루트포스']}
+                            defaultValue={[]}
                             onChange={handleChange}
                             options={[
                                 {value: 1, label: '브루트포스'},
@@ -306,7 +280,7 @@ const Post = () =>{
                                     ]}
                                 />
                             </Space>
-                            <span className="ml-4">알림설정</span><DatePicker onChange={setAlarm} className="ml-2"/>
+                            <span className="ml-4">알림설정</span><DatePicker onChange={handleAlarm} className="ml-2"/>
                         </div>
                         <Button onClick={showModal} type="primary"
                                 className="hidden lg:block bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글

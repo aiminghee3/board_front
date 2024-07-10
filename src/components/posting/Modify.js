@@ -54,20 +54,14 @@ const Modify = () =>{
         setOpen(false);
       };
 
-    //알람시간
-    const setAlarm = (date, dateString) =>{
-        console.log(new Date(dateString));
-        //author_alarm(new Date(dateString));
-    }
-
     const [postData, setPostData] = useState({
         title : data.title,
         problem_number : data.problem_number,
         problem_link : data.problem_link,
         rate : data.rate,
         content : data.content,
-        //alarm : null,
-        tags : [],
+        alarm : null,
+        tags : [''],
     });
 
     const handleChange = (value) => {
@@ -85,8 +79,6 @@ const Modify = () =>{
             ...postData,
             rate: intValue
         });
-        console.log('Selected value:', value);
-        console.log('Updated postData:', postData);
     };
 
     //제목, 번호, 태그, 링크
@@ -114,11 +106,19 @@ const Modify = () =>{
             content : content,
         });
     }
+
+    const handleAlarm = (date, dateString) =>{
+        const dateObject = new Date(dateString);
+        setPostData({
+            ...postData,
+            alarm : dateObject,
+        });
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         const token = Cookies.get('accessToken');
-        console.log(data)
         try {
             // POST 요청 보내기
             await axios.put(`${process.env.REACT_APP_BASE_URL}/post/${data.id}`, postData,{
@@ -182,7 +182,6 @@ const Modify = () =>{
                                 width: '100%',
                             }}
                             placeholder="Please select"
-                            defaultValue={data.hashtag.map(item => item.name)}
                             onChange={handleChange}
                             options={[
                                 {value: 1, label: '브루트포스'},
@@ -241,7 +240,7 @@ const Modify = () =>{
                                     ]}
                                 />
                             </Space>
-                            <span className="ml-4">알림설정</span><DatePicker onChange={setAlarm} className="ml-2"/>
+                            <span className="ml-4">알림설정</span><DatePicker onChange={handleAlarm} className="ml-2"/>4
                         </div>
                         <Button onClick={showModal} type="primary"
                                 className="hidden lg:block bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 수정</Button>

@@ -15,21 +15,21 @@ firebase.initializeApp(firebaseConfig)
 
 const messaging = firebase.messaging()
 
+
 export async function requestPermission() {
-    void Notification.requestPermission().then((permission) => {
-        console.log('승인 요청중....')
+    try {
+        const permission = await Notification.requestPermission();
+        console.log('승인 요청중....');
         if (permission === 'granted') {
-            messaging
-                .getToken({ vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY })
-                .then((token) => {
-                    console.log(`푸시 토큰 발급 완료 : ${token}`)
-                })
-                .catch((err) => {
-                    console.log('푸시 토큰 에러 명 : ' +  err);
-                    console.log('푸시 토큰 가져오는 중에 에러 발생')
-                })
-        } else if (permission === 'denied') {
-            console.log('푸시 권한 차단')
+            const token = await messaging.getToken({ vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY });
+            console.log(`푸시 토큰 발급 완료 : ${token}`);
+            return token;
+        } else {
+            console.log('푸시 권한 차단');
+            return null;
         }
-    })
+    } catch (err) {
+        console.log('푸시 토큰 가져오는 중에 에러 발생', err);
+        return null;
+    }
 }

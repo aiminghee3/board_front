@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import Comment from "../posting/Comment";
 import {requestPermission} from "../../firebase-messaging-sw";
 
 const Main = () => {
@@ -58,7 +57,6 @@ const Main = () => {
      */
     useEffect(() => {
         const fetchData = async () => {
-            await requestPermission();
             await getData();
         };
         fetchData();

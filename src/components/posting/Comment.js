@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from "js-cookie";
 import {jwtDecode} from "jwt-decode";
+import RequireLoginModal from "../common/RequireLoginModal";
 
 const Comment = ({data}) => {
     const [loginedMemberId, setLoginedMemberId] = useState();
@@ -13,9 +14,11 @@ const Comment = ({data}) => {
     const [isReplying, setIsReplying] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [comments, setComments] = useState([]);
+    const [requireLogin, setRequireSetLogin] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        await verifyAccessToken();
         const token = Cookies.get('accessToken');
         try {
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/comment`, {
@@ -29,7 +32,6 @@ const Comment = ({data}) => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            console.log('댓글이 성공적으로 전송되었습니다:', response.data);
             setComment(''); // 댓글 작성 후 입력 필드 초기화
             await fetchComments(); // 댓글 작성 후 최신 댓글 목록을 다시 불러옴
         } catch (error) {
@@ -42,7 +44,6 @@ const Comment = ({data}) => {
             ...prev,
             [commentId]: !prev[commentId],
         }));
-        console.log(isEditing);
     };
 
     const handleReplyButton = (commentId) => {
@@ -58,6 +59,7 @@ const Comment = ({data}) => {
     };
 
     const handleEditSubmit = async (e, commentId) => {
+        await verifyAccessToken();
         e.preventDefault();
         // 수정된 댓글을 서버로 전송하는 로직 추가
         setIsEditing((prev) => ({
@@ -75,7 +77,6 @@ const Comment = ({data}) => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            console.log('댓글이 성공적으로 수정되었습니다:', response.data);
             setComment(''); // 댓글 작성 후 입력 필드 초기화
             await fetchComments(); // 댓글 작성 후 최신 댓글 목록을 다시 불러옴
         } catch (error) {
@@ -84,6 +85,7 @@ const Comment = ({data}) => {
     };
 
     const handleReplySubmit = async (e, commentId) => {
+        await verifyAccessToken();
         e.preventDefault();
         // 답글을 서버로 전송하는 로직 추가
         setIsReplying((prev) => ({
@@ -103,7 +105,6 @@ const Comment = ({data}) => {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-            console.log('댓글이 성공적으로 수정되었습니다:', response.data);
             setReplyComment(''); // 댓글 작성 후 입력 필드 초기화
             await fetchComments(); // 댓글 작성 후 최신 댓글 목록을 다시 불러옴
         } catch (error) {
@@ -113,6 +114,7 @@ const Comment = ({data}) => {
 
     const handleDelete = async (commentId) => {
         // 댓글을 삭제하는 로직 추가
+        await verifyAccessToken();
         setShowDeleteModal(false);
         const token = Cookies.get('accessToken');
         try {
@@ -131,14 +133,41 @@ const Comment = ({data}) => {
         await fetchComments(); // 삭제 후 최신 댓글 목록을 다시 불러옴
     };
 
-    const fetchComments = async () => {
-        try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/comment/${data.id}`);
-            await setComments(response.data.comments);
-        } catch (error) {
-            console.error('댓글을 불러오는데 실패했습니다:', error);
+    const verifyRefreshToken = async () =>{
+        const refreshToken = Cookies.get('refreshToken');
+        try{
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/refresh`, {
+                headers: {
+                    'Authorization': `Bearer ${refreshToken}`,
+                },
+            });
+            if(response.status === 200){
+                Cookies.set('accessToken', response.data.accessToken);
+            }
+            else{
+                await setRequireSetLogin(true);
+            }
+        }catch(error){
+            await setRequireSetLogin(true);
+            console.error('로그인 검증에 실패하셨습니다.', error);
         }
-    };
+    }
+
+    //Access토큰 검증
+    const verifyAccessToken = async () =>{
+        const accessToken = Cookies.get('accessToken');
+        try {
+            // access 토큰 검증하기
+            await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/access`,  {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+            });
+        } catch (error) {
+            //Access토큰 검증 후 실패하면 RefreshToken검증
+            await verifyRefreshToken();
+        }
+    }
 
     const extractUserIdFromAccessToken = () => {
         const accessToken = Cookies.get('accessToken');
@@ -153,20 +182,22 @@ const Comment = ({data}) => {
         }
     };
 
+    const fetchComments = async () => {
+        const postId = data.id.toString()
+        try {
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/comment/${postId}`);
+            setComments(response.data.comments);
+        } catch (error) {
+            console.error('댓글 데이터를 가져오는 데 실패했습니다:', error);
+        }
+    };
+
     useEffect(() => {
-        console.log(data);
-        const fetchComments = async () => {
-            try {
-                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/comment/${data.id}`);
-                setComments(response.data.comments);
-            } catch (error) {
-                console.error('댓글 데이터를 가져오는 데 실패했습니다:', error);
-            }
-        };
-        fetchComments();
+        const fetchData = async() =>{
+            await fetchComments();
+        }
+        fetchData();
         extractUserIdFromAccessToken();
-        console.log(loginedMemberId);
-        console.log(comments);
     }, [data]);
 
 
@@ -335,6 +366,7 @@ const Comment = ({data}) => {
                     )}
                 </div>
             </section>
+            <RequireLoginModal open={requireLogin}/>
         </>
     );
 }

@@ -45,7 +45,7 @@ const Detail = () => {
         const token = Cookies.get('accessToken');
         handleCancel();
         try {
-            await axios.delete(`${process.env.REACT_APP_BASE_URL}/post/`, {
+            await axios.delete(`${process.env.REACT_APP_BASE_URL}/post`, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
@@ -77,7 +77,6 @@ const Detail = () => {
         try {
             const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/post/${postData.id}`);
             setData(result.data);
-
             const tempData = result.data;
 
             // 날짜 변환
