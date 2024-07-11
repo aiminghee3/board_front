@@ -92,7 +92,7 @@ const Detail = () => {
             return result.data;
 
         } catch (error) {
-            console.log('게시글을 불러오는데 실패했습니다.');
+            console.error(error);
         }
     };
 
