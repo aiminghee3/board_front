@@ -237,7 +237,7 @@ const Comment = ({data}) => {
                                     <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
                                         <img
                                             className="mr-2 w-6 h-6 rounded-full"
-                                            src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                                            src="https://cdn-icons-png.flaticon.com/128/4519/4519729.png"
                                             alt={comment.email}/> {comment.email}
                                     </p>
                                     <p className="text-sm text-gray-600 dark:text-gray-400">
@@ -311,7 +311,7 @@ const Comment = ({data}) => {
                                             <p className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
                                                 <img
                                                     className="mr-2 w-6 h-6 rounded-full"
-                                                    src="https://flowbite.com/docs/images/people/profile-picture-2.jpg"
+                                                    src="https://cdn-icons-png.flaticon.com/128/4519/4519729.png"
                                                     alt={childComment.email}/> {childComment.email}
                                             </p>
                                             <p className="text-sm text-gray-600 dark:text-gray-400">

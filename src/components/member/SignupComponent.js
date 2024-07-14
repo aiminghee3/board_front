@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import {requestPermission} from "../../firebase-messaging-sw";
+import Cookies from "js-cookie";
 
 const SignupComponent = () =>{
     const navigate = useNavigate();
@@ -26,11 +27,8 @@ const SignupComponent = () =>{
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const fcmToken = await requestPermission();
-        if (fcmToken === null) {
-            setError('푸시 토큰을 가져오는 데 실패했습니다.');
-            return;
-        }
+
+        const fcmToken = Cookies.get('fcmToken');
 
         const tokenFormData = {
             ...formData,
