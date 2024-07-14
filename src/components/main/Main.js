@@ -123,7 +123,7 @@ const Main = () => {
                             <div className="font-normal text-xl sm:text-2xl">{item.problem_number}</div>
                         </div>
                         <div className="h-10 w-full pl-2 mt-1">
-                            <div className="font-normal text-lg sm:text-xl text-gray-700">{item.title}</div>
+                            <div className="font-normal text-lg sm:text-xl text-gray-700 overflow-hidden text-ellipsis whitespace-nowrap">{item.title}</div>
                         </div>
                         <div className="h-8 w-full flex justify-between items-center">
                             <div className="flex flex-wrap">

@@ -115,7 +115,8 @@ const Detail = () => {
                         <img src={data.image} alt="난이도" className="h-8 w-8 mr-1"/>
                         <div className="text-2xl sm:text-3xl font-semibold">{data.problem_number}</div>
                     </div>
-                    <div className="h-14 text-2xl sm:text-3xl ml-2 font-semibold pt-1">{data.title}</div>
+                    <div
+                        className="h-14 text-2xl sm:text-3xl ml-2 font-semibold pt-1 overflow-hidden text-ellipsis whitespace-nowrap">{data.title}</div>
                     <div className="flex w-full justify-between items-center">
                         <div className="flex sm:justify-between flex-wrap sm:flex-nowrap">
                             <div className="flex flex-wrap sm:flex-nowrap">
