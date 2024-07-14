@@ -1,5 +1,5 @@
-import firebase from 'firebase/app'
-import 'firebase/messaging'
+import firebase from 'firebase/app';
+import 'firebase/messaging';
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -8,15 +8,24 @@ const firebaseConfig = {
     storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
     messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
     appId: process.env.REACT_APP_FIRE_APP_ID,
-    measurementId: process.env.REACT_APP_MESAUREMENT_ID
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
+};
+
+firebase.initializeApp(firebaseConfig);
+
+let messaging;
+try {
+    messaging = firebase.messaging();
+} catch (error) {
+    console.error('Firebase messaging is not supported in this browser:', error);
 }
 
-firebase.initializeApp(firebaseConfig)
-
-const messaging = firebase.messaging()
-
-
 export async function requestPermission() {
+    if (!messaging) {
+        console.log('This browser does not support Firebase messaging.');
+        return null;
+    }
+
     try {
         const permission = await Notification.requestPermission();
         console.log('승인 요청중....');
