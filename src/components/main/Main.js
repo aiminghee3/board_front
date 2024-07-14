@@ -56,7 +56,8 @@ const Main = () => {
     const getFcmToken = () =>{
         const fcmToken = Cookies.get('fcmToken');
         if(!fcmToken){
-            requestPermission();
+            const fcmToken = requestPermission();
+            Cookies.set('fcmToken', fcmToken);
         }
     }
     /**
