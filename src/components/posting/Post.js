@@ -4,7 +4,6 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { Editor } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor.css';
-import { Rate } from 'antd';
 import { Button, Modal, Space, Select, DatePicker } from 'antd';
 import SuccessModal from "../common/SuccessModal";
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
@@ -21,6 +20,7 @@ import prism from 'prismjs';
 // Step 2. Import language files of prismjs that you need
 import 'prismjs/components/prism-clojure.js';
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
+import {requestPermission} from "../../firebase-messaging-sw";
 
 
 const Post = () =>{
@@ -167,8 +167,17 @@ const Post = () =>{
         }
     }
 
+    const getFcmToken = () =>{
+        const fcmToken = Cookies.get('fcmToken');
+        if(!fcmToken){
+            const fcmToken = requestPermission();
+            Cookies.set('fcmToken', fcmToken);
+        }
+    }
+
     useEffect(()=>{
         verifyAccessToken();
+        getFcmToken();
     }, [])
    
     return(

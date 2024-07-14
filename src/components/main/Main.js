@@ -66,8 +66,8 @@ const Main = () => {
     useEffect(() => {
         const fetchData = async () => {
             getData();
-            getFcmToken();
         };
+        getFcmToken();
         fetchData();
     }, []);
 

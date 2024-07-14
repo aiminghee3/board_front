@@ -1,32 +1,35 @@
-self.addEventListener("install", function (e) {
-  console.log("fcm sw install..");
-  self.skipWaiting();
-});
+import firebase from 'firebase/app'
+import 'firebase/messaging'
 
-self.addEventListener("activate", function (e) {
-  console.log("fcm sw activate..");
-});
+const firebaseConfig = {
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIRE_APP_ID,
+    measurementId: process.env.REACT_APP_MESAUREMENT_ID
+}
 
-self.addEventListener("push", function (e) {
-  console.log("push: ", e.data.json());
-  if (!e.data.json()) return;
+firebase.initializeApp(firebaseConfig)
 
-  const resultData = e.data.json().notification;
-  const notificationTitle = resultData.title;
-  const notificationOptions = {
-    body: resultData.body,
-    icon: resultData.image,
-    tag: resultData.tag,
-    ...resultData,
-  };
-  console.log("push: ", { resultData, notificationTitle, notificationOptions });
+const messaging = firebase.messaging()
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
-});
 
-self.addEventListener("notificationclick", function (event) {
-  console.log("notification click");
-  const url = "/";
-  event.notification.close();
-  event.waitUntil(clients.openWindow(url));
-});
+export async function requestPermission() {
+    try {
+        const permission = await Notification.requestPermission();
+        console.log('승인 요청중....');
+        if (permission === 'granted') {
+            const token = await messaging.getToken({ vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY });
+            console.log(`푸시 토큰 발급 완료 : ${token}`);
+            return token;
+        } else {
+            console.log('푸시 권한 차단');
+            return null;
+        }
+    } catch (err) {
+        console.log('푸시 토큰 가져오는 중에 에러 발생', err);
+        return null;
+    }
+}

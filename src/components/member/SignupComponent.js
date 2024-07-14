@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import {Link, useNavigate} from 'react-router-dom';
 import axios from 'axios';
-import {requestPermission} from "../../firebase-messaging-sw";
 import Cookies from "js-cookie";
 
 const SignupComponent = () =>{
