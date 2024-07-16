@@ -289,7 +289,17 @@ const Post = () =>{
                                     ]}
                                 />
                             </Space>
-                            <span className="ml-4">알림설정</span><DatePicker onChange={handleAlarm} className="ml-2"/>
+                            <span className="ml-4">알림설정</span>
+                            <Space direction="vertical" size={12}>
+                                <DatePicker
+                                    format={{
+                                        format: 'YYYY-MM-DD HH:mm:ss',
+                                        type: 'mask',
+                                    }}
+                                    onChange={handleAlarm}
+                                    className="ml-2"
+                                />
+                            </Space>
                         </div>
                         <Button onClick={showModal} type="primary"
                                 className="hidden lg:block bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글
