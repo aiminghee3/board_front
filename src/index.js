@@ -59,6 +59,7 @@ const getFcmToken = async () => {
     }
   } else {
     console.log('FCM token already exists');
+    console.log('FCM token:', fcmToken);
   }
 };
 
