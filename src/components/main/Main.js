@@ -53,10 +53,10 @@ const Main = () => {
         }
     };
 
-    const getFcmToken = () =>{
+    const getFcmToken = async () =>{
         const fcmToken = Cookies.get('fcmToken');
         if(!fcmToken){
-            const fcmToken = requestPermission();
+            const fcmToken = await requestPermission();
             Cookies.set('fcmToken', fcmToken);
         }
     }

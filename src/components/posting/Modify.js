@@ -192,11 +192,13 @@ const Modify = () =>{
                                 {value: 6, label: '그래프'},
                                 {value: 7, label: '정렬'},
                                 {value: 8, label: '문자열'},
+                                {value: 9, label: '자료구조'},
+                                {value: 10, label: '스택'},
                             ]}
                         />
                     </Space>
 
-                    <div className="flex flex-wrap items-center justify-between h-8 mt-4">
+                    <div className="flex flex-wrap items-center justify-between mt-4 relative">
                         <div className="flex items-center w-full sm:w-auto">
                             <Space className="h-8 min-w-32"
                                    direction="vertical"
@@ -240,7 +242,7 @@ const Modify = () =>{
                                     ]}
                                 />
                             </Space>
-                            <span className="ml-4">알림설정</span>
+                            <div className="ml-4 hidden md:block">알림설정</div>
                             <Space direction="vertical" size={12}>
                                 <DatePicker
                                     format={{
@@ -274,7 +276,7 @@ const Modify = () =>{
 
                 />
                 <Button onClick={showModal} type="primary"
-                        className="bg-slate-400 p-1 rounded-lg text-white font-medium mt-2 mb-2 float-end">게시글 수정</Button>
+                        className="block md:hidden bg-slate-400 p-1 rounded-lg text-white font-medium mt-2 mb-2 float-end">게시글 수정</Button>
                 <Modal
                     open={open}
                     title="알림사항"

@@ -108,7 +108,7 @@ const Detail = () => {
     }, []);
 
     return (
-        <>
+        <div className = "relative">
             <div className="h-full max-w-3xl mx-auto">
                 <div className="sm:h-48 px-2 h-auto w-full border-b-2">
                     <div className="w-full h-16 flex items-center">
@@ -163,7 +163,7 @@ const Detail = () => {
                 <div>정말로 삭제하시겠습니까?</div>
             </Modal>
             <Comment data = {data}/>
-        </>
+        </div>
     );
 };
 

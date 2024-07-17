@@ -113,6 +113,8 @@ const Post = () =>{
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log('test');
+        console.log(postData);
         const token = Cookies.get('accessToken');
         try {
             // POST 요청 보내기
@@ -167,10 +169,10 @@ const Post = () =>{
         }
     }
 
-    const getFcmToken = () =>{
+    const getFcmToken = async () =>{
         const fcmToken = Cookies.get('fcmToken');
         if(!fcmToken){
-            const fcmToken = requestPermission();
+            const fcmToken = await requestPermission();
             Cookies.set('fcmToken', fcmToken);
         }
     }
@@ -291,7 +293,7 @@ const Post = () =>{
                                     ]}
                                 />
                             </Space>
-                            <span className="ml-4">알림설정</span>
+                            <span className="ml-4 hidden md:block">알림설정</span>
                             <Space direction="vertical" size={12}>
                                 <DatePicker
                                     format={{
@@ -304,8 +306,7 @@ const Post = () =>{
                             </Space>
                         </div>
                         <Button onClick={showModal} type="primary"
-                                className="hidden lg:block bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글
-                            작성</Button>
+                                className="hidden lg:block bg-slate-400 p-1 rounded-lg text-white font-medium mb-1">게시글 작성</Button>
 
                     </div>
                 </div>
@@ -327,7 +328,7 @@ const Post = () =>{
                 />
                 <div className="lg:hidden bottom-4 right-4">
                     <Button onClick={showModal} type="primary"
-                            className="bg-slate-400 p-1 rounded-lg text-white font-medium mt-2 mb-2 float-end">게시글 작성</Button>
+                            className="block md:hidden bg-slate-400 p-1 rounded-lg text-white font-medium mt-2 mb-2 float-end">게시글 수정</Button>
                 </div>
 
                 <Modal
