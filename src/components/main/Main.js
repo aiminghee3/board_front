@@ -57,6 +57,7 @@ const Main = () => {
         const fcmToken = Cookies.get('fcmToken');
         if(!fcmToken){
             const fcmToken = await requestPermission();
+            console.log(fcmToken);
             Cookies.set('fcmToken', fcmToken);
         }
     }

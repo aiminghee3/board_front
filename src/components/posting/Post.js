@@ -113,8 +113,6 @@ const Post = () =>{
     
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('test');
-        console.log(postData);
         const token = Cookies.get('accessToken');
         try {
             // POST 요청 보내기
