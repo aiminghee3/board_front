@@ -52,7 +52,7 @@ const requestPermission = async () => {
 
 const getFcmToken = async () => {
   const fcmToken = Cookies.get('fcmToken');
-  if (fcmToken === null || fcmToken === undefined) {
+  if (fcmToken === null || fcmToken === undefined || fcmToken === 'null') {
     const newFcmToken = await requestPermission();
     if (newFcmToken) {
       Cookies.set('fcmToken', newFcmToken);
