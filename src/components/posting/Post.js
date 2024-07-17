@@ -239,6 +239,8 @@ const Post = () =>{
                                 {value: 6, label: '그래프'},
                                 {value: 7, label: '정렬'},
                                 {value: 8, label: '문자열'},
+                                {value: 9, label: '자료구조'},
+                                {value: 10, label: '스택'},
                             ]}
                         />
                     </Space>
