@@ -20,7 +20,6 @@ import prism from 'prismjs';
 // Step 2. Import language files of prismjs that you need
 import 'prismjs/components/prism-clojure.js';
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight';
-import {requestPermission} from "../../firebase-messaging-sw";
 
 
 const Post = () =>{
@@ -167,17 +166,9 @@ const Post = () =>{
         }
     }
 
-    const getFcmToken = async () =>{
-        const fcmToken = Cookies.get('fcmToken');
-        if(!fcmToken){
-            const fcmToken = await requestPermission();
-            Cookies.set('fcmToken', fcmToken);
-        }
-    }
 
     useEffect(()=>{
         verifyAccessToken();
-        getFcmToken();
     }, [])
    
     return(

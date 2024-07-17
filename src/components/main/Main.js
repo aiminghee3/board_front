@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {requestPermission} from "../../firebase-messaging-sw";
-import Cookies from "js-cookie";
 
 const Main = () => {
     /**
@@ -53,22 +51,13 @@ const Main = () => {
         }
     };
 
-    const getFcmToken = async () =>{
-        const fcmToken = Cookies.get('fcmToken');
-        if(!fcmToken){
-            const fcmToken = await requestPermission();
-            console.log(fcmToken);
-            Cookies.set('fcmToken', fcmToken);
-        }
-    }
     /**
      * api 가져오기
      */
     useEffect(() => {
         const fetchData = async () => {
-            getData();
+            await getData();
         };
-        getFcmToken();
         fetchData();
     }, []);
 

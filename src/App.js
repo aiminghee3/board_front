@@ -1,5 +1,4 @@
 import './input.css';
-import './firebase-messaging-sw';
 import { Routes, Route } from "react-router-dom";
 import LoginPage from './page/LoginPage';
 import SignupPage from './page/SignupPage';
