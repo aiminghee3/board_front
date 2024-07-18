@@ -5,7 +5,6 @@ import reportWebVitals from './reportWebVitals';
 import { RecoilRoot } from 'recoil';
 import {BrowserRouter} from "react-router-dom";
 import firebase from "firebase";
-import { messaging } from 'firebase';
 import Cookies from "js-cookie";
 
 
@@ -18,7 +17,10 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIRE_APP_ID,
   measurementId: process.env.REACT_APP_MESAUREMENT_ID
 };
-firebase.initializeApp(firebaseConfig);
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
 
 
 const requestPermission = async () => {
