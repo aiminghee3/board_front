@@ -198,7 +198,6 @@ const Comment = ({data}) => {
         }
         fetchData();
         extractUserIdFromAccessToken();
-        console.log(data);
     }, [data]);
 
 
