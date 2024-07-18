@@ -59,8 +59,8 @@ const Comment = ({data}) => {
     };
 
     const handleEditSubmit = async (e, commentId) => {
-        await verifyAccessToken();
         e.preventDefault();
+        await verifyAccessToken();
         // 수정된 댓글을 서버로 전송하는 로직 추가
         setIsEditing((prev) => ({
             ...prev,
@@ -85,8 +85,8 @@ const Comment = ({data}) => {
     };
 
     const handleReplySubmit = async (e, commentId) => {
-        await verifyAccessToken();
         e.preventDefault();
+        await verifyAccessToken();
         // 답글을 서버로 전송하는 로직 추가
         setIsReplying((prev) => ({
             ...prev,
@@ -198,6 +198,7 @@ const Comment = ({data}) => {
         }
         fetchData();
         extractUserIdFromAccessToken();
+        console.log(data);
     }, [data]);
 
 
